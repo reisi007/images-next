@@ -1,0 +1,45 @@
+{
+  "name": "@reisisoft/images-next",
+  "version": "0.0.4-beta1",
+  "description": "A library full of util classes for a next.js tailwind app",
+  "type": "module",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.mjs",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "@socialgouv/matomo-next": "^1.4.0",
+    "classnames": "^2.3.2",
+    "dayjs": "^1.11.5",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^13.0.1",
+    "next": "13.0.6",
+    "next-image-export-optimizer": "^1.0.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "ts-exif-parser": "^0.2.2",
+    "typescript": "4.9.4"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-multi-entry": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^10.0.1",
+    "@types/markdown-it": "^12.2.3",
+    "@types/node": "18.11.12",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
+    "rollup": "^3.7.5",
+    "rollup-plugin-dts": "^5.0.0"
+  }
+}
