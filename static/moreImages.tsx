@@ -1,7 +1,8 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import { DIRECTORY_IMAGE, readMultipleImages } from './readImage';
-import { getAllReviews, hasAdvertisedCategory } from './loadReviews';
+import { getAllReviews } from './loadReviews';
+import { hasAdvertisedCategory } from '../types';
 
 function isNotUndefined<T>(e: T | undefined): e is T {
   return e !== undefined;

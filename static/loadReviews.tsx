@@ -3,25 +3,10 @@ import path from 'path';
 import matter from 'gray-matter';
 import md from 'markdown-it';
 import dayjs from 'dayjs';
-import { asyncFlatMap, asyncMap } from '../utils/asyncFlatMap';
-import { TEMPLATE_STRING_AS_DATE } from '../utils/Age';
-
-export type ReviewCategory = typeof REVIEW_TYPES[number];
-export type ReviewProps = {
-  image?: string
-  name: string
-  date: string
-  rating?: number
-  type: ReviewCategory
-};
-
-const REVIEW_TYPES = ['business', 'beauty', 'boudoir', 'pärchen', 'live', 'sport'] as const;
-
-export type Review = {
-  id: string
-  frontmatter: ReviewProps
-  html: string | null
-};
+import { asyncFlatMap, asyncMap, TEMPLATE_STRING_AS_DATE } from '../utils';
+import {
+  hasAdvertisedCategory, Review, REVIEW_TYPES, ReviewCategory, ReviewProps,
+} from '../types';
 
 const postsDirectory = path.join(process.cwd(), 'private', 'reviews');
 
@@ -52,7 +37,7 @@ async function loadReviews() {
     return data as ReviewProps;
   }
 
-  const allReviewa = await asyncMap(filePaths, async (fullPath: string): Promise<Review> => {
+  return asyncMap(filePaths, async (fullPath: string): Promise<Review> => {
     // Remove ".md" from file name to get id
     const fileName = path.basename(fullPath);
     const id = fileName.replace(/\.review.md$/, '');
@@ -73,13 +58,6 @@ async function loadReviews() {
       frontmatter,
     };
   });
-  return allReviewa;
-}
-
-const ADVERTISED_CATEGORIES: Array<ReviewCategory> = ['beauty', 'boudoir', 'sport', 'pärchen'];
-
-export function hasAdvertisedCategory(props: ReviewProps | ReviewCategory): boolean {
-  return ADVERTISED_CATEGORIES.includes(typeof props === 'string' ? props : props.type);
 }
 
 export async function getAllReviews(): Promise<Array<Review>> {

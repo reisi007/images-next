@@ -24,7 +24,7 @@ export function Footer() {
           <ReisishotIcon icon={ReisishotIcons.Mail} size={ReisishotIconSizes.LARGE} />
         </a>
       </div>
-      {router.pathname !== '/impressum' && <Link className="block py-2 text-center" href="/impressum">Impressum & Datenschutz</Link>}
+      {router.pathname !== '/impressum' && <Link className="block py-2 text-center" href="/pages/impressum">Impressum & Datenschutz</Link>}
     </footer>
   );
 }

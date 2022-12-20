@@ -5,9 +5,8 @@ import {
 import { ImageSize } from 'ts-exif-parser';
 import {
   Breakpoint, Image, ImageBreakpoints, useImagePadding,
-} from '../utils/Image';
-import { Styleable } from '../types/Styleable';
-import { ImageInfo } from '../static/readImage';
+} from '../utils';
+import {ImageInfo, Styleable} from '../types';
 
 export function BeforeAfterImage({
   className,
