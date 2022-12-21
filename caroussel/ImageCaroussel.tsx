@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import {CSSProperties, useMemo} from 'react';
 import {AbstractCaroussel} from './AbstractCaroussel';
-import {Image, useImagePadding} from '../utils';
-import {ImageInfo, MetadataMap, Styleable} from '../types';
+import {ImageInfo, MetadataMap} from '../types/ImageTypes';
+import {Styleable} from '../types/Styleable';
+import {Image, useImagePadding} from '../utils/Image';
 
 export function ImageCaroussel<T extends string>({
                                                    metadataMap,

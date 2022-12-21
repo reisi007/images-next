@@ -3,10 +3,10 @@ import {
   CSSProperties, MouseEventHandler, TouchEventHandler, useCallback, useState,
 } from 'react';
 import { ImageSize } from 'ts-exif-parser';
-import {
-  Breakpoint, Image, ImageBreakpoints, useImagePadding,
-} from '../utils';
-import {ImageInfo, Styleable} from '../types';
+import {ImageInfo} from '../types/ImageTypes';
+import {Breakpoint, ImageBreakpoints, useImagePadding} from '../utils/Image';
+import {Styleable} from '../types/Styleable';
+import {Image} from '../utils/Image';
 
 export function BeforeAfterImage({
   className,

@@ -65,7 +65,7 @@ function buildSizeString(data?: ImageBreakpoints): string | undefined {
     .sort(([a], [b]) => Number(b) - Number(a))
     .map(([key, cnt]) => {
       if (key === '0') return `${100 / cnt}vw`;
-      return `(max-width: ${key}px) ${Number(key) / cnt}vw`;
+      return `(max-width: ${key}px) ${Number(key) / cnt}px`;
     })
     .join(',');
 }

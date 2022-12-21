@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import {useEffect, useRef, useState} from 'react';
-import {ImageInfo, Styleable} from '../types';
-import {Breakpoint, Image, ImageBreakpoints} from '../utils';
+import {Breakpoint, ImageBreakpoints} from '../utils/Image';
+import {ImageInfo} from '../types/ImageTypes';
+import {Styleable} from '../types/Styleable';
+import {Image} from '../utils/Image';
 
 const GALLERY_IMAGE_BREAKPOINTS: ImageBreakpoints = {
   [Breakpoint.default]: 1,
