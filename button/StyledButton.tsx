@@ -1,5 +1,6 @@
-import React, { ButtonHTMLAttributes, HTMLProps } from 'react';
+import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 import classNames from 'classnames';
+import Link, { LinkProps } from 'next/link';
 
 const BUTTON_CLASSES = 'p-2 border duration-150 rounded-lg focus:ring disabled:opacity-75 disabled:bg-gray-600 disabled:text-gray-200';
 
@@ -9,7 +10,6 @@ export function StyledButton({
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
   const classes = classNames(
     BUTTON_CLASSES,
-    'flex items-center',
     buttonProps.className,
   );
   return (
@@ -25,20 +25,25 @@ export function StyledButton({
 
 export function StyledLinkButton({
   children,
+  disabled,
   ...buttonProps
-}: HTMLProps<HTMLAnchorElement>) {
+}: LinkProps & { children?: ReactNode, className?: string, disabled?: boolean }) {
   const classes = classNames(
     BUTTON_CLASSES,
-    'text-center text-black no-underline',
+    'text-center black',
     buttonProps.className,
   );
+  if (disabled) {
+    return <StyledButton disabled className={buttonProps.className}>{children}</StyledButton>;
+  }
+
   return (
-    <a
+    <Link
       {...buttonProps}
       className={classes}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 
