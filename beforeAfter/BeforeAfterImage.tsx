@@ -3,10 +3,11 @@ import {
   CSSProperties, MouseEventHandler, TouchEventHandler, useCallback, useState,
 } from 'react';
 import { ImageSize } from 'ts-exif-parser';
-import {ImageInfo} from '../types/ImageTypes';
-import {Breakpoint, ImageBreakpoints, useImagePadding} from '../utils/Image';
-import {Styleable} from '../types/Styleable';
-import {Image} from '../utils/Image';
+import { ImageInfo } from '../types/ImageTypes';
+import {
+  Breakpoint, ImageBreakpoints, useImagePadding, Image,
+} from '../utils/Image';
+import { Styleable } from '../types/Styleable';
 
 export function BeforeAfterImage({
   className,
@@ -53,7 +54,8 @@ export function BeforeAfterImage({
       </div>
       <div
         className={classNames(
-          'before:block before:fixed before:-top-1/2 before:inset-y-0 before:w-0.5 before:bg-white before:h-[100rem] before:ml-4',
+          'before:block before:fixed before:inset-y-0 before:-top-10 before:w-0.5 before:bg-white before:h-1/2 before:ml-4',
+          'after:block after:fixed after:bottom-0 after:w-0.5 after:bg-white after:h-1/2 after:ml-4',
           'z-20 absolute top-1/2 text-center align-middle -ml-9 -mt-10 h-10 w-10 pointer-events-none text-white rounded-full',
           'shadow bg-transparent border-2',
         )}

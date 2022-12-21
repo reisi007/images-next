@@ -4,11 +4,13 @@ import { CONTAIINER_CLASSES } from '../utils/Css';
 import { Header, HeaderProps } from './Header';
 import { Footer } from './Footer';
 
-export function Page({
+export type BasePageProps = { children: ReactNode, className?: string } & HeaderProps;
+
+export function BasePage({
   children,
   className,
   ...headerProps
-}: { children: ReactNode, className?: string } & HeaderProps) {
+}: BasePageProps) {
   return (
     <>
       <Header {...headerProps} />

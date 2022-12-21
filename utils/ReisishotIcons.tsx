@@ -32,6 +32,6 @@ export function ReisishotIcon({
   className,
   ...props
 }: { icon: ReisishotIcons, size?: ReisishotIconSizes } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Styleable>) {
-  const classes = classNames(`icon ${icon} ${size}`, className);
+  const classes = classNames('icon', icon, size, className);
   return <i {...props} className={classes}>{children}</i>;
 }
