@@ -2,7 +2,7 @@ import {
   ReactNode, useCallback, useEffect, useMemo, useState,
 } from 'react';
 import classNames from 'classnames';
-import {Styleable} from '../types/Styleable';
+import { Styleable } from '../types/Styleable';
 
 export function AbstractCaroussel<I extends string | { id: string | number }>(
   {

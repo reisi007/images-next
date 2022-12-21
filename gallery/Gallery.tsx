@@ -35,7 +35,7 @@ export function Gallery({
     );
     observer.observe(curDiv);
     return () => observer.unobserve(curDiv);
-  }, [images.length]);
+  }, [images.length, loadImageStepSize]);
 
   return (
     <>

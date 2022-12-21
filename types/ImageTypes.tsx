@@ -1,4 +1,4 @@
-import {ImageSize} from 'ts-exif-parser';
+import { ImageSize } from 'ts-exif-parser';
 
 export type ImageInfo = { size: ImageSize, metadata: Metadata };
 export type Metadata = JsonMetadata & { created?: number };

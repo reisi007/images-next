@@ -1,8 +1,10 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import { ExifParserFactory } from 'ts-exif-parser';
-import {ImageInfo, JsonMetadata, Metadata, MetadataMap} from '../types/ImageTypes';
-import {asyncMap} from '../utils/asyncFlatMap';
+import {
+  ImageInfo, JsonMetadata, Metadata, MetadataMap,
+} from '../types/ImageTypes';
+import { asyncMap } from '../utils/asyncFlatMap';
 
 export const DIRECTORY_IMAGE = path.join(process.cwd(), 'public', 'images');
 const imageMetadataDirectory = path.join(process.cwd(), 'private', 'images');

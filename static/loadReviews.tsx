@@ -3,9 +3,11 @@ import path from 'path';
 import matter from 'gray-matter';
 import md from 'markdown-it';
 import dayjs from 'dayjs';
-import {asyncFlatMap, asyncMap} from '../utils/asyncFlatMap';
-import {TEMPLATE_STRING_AS_DATE} from '../utils/Age';
-import {hasAdvertisedCategory, Review, REVIEW_TYPES, ReviewCategory, ReviewProps} from '../types/ReviewTypes';
+import { asyncFlatMap, asyncMap } from '../utils/asyncFlatMap';
+import { TEMPLATE_STRING_AS_DATE } from '../utils/Age';
+import {
+  hasAdvertisedCategory, Review, REVIEW_TYPES, ReviewCategory, ReviewProps,
+} from '../types/ReviewTypes';
 
 const postsDirectory = path.join(process.cwd(), 'private', 'reviews');
 

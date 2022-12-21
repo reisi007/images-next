@@ -20,5 +20,3 @@ const ADVERTISED_CATEGORIES: Array<ReviewCategory> = ['beauty', 'boudoir', 'spor
 export function hasAdvertisedCategory(props: ReviewProps | ReviewCategory): boolean {
   return ADVERTISED_CATEGORIES.includes(typeof props === 'string' ? props : props.type);
 }
-
-

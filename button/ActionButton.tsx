@@ -2,8 +2,6 @@ import { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
 import { StyledButton } from './StyledButton';
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> ;
-
 export function ActionButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const { className } = props;
   const classes = classNames(

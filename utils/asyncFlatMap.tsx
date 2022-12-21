@@ -14,6 +14,3 @@ export function flatten<T>(arr: T[][]): T[] {
   // eslint-disable-next-line no-extra-parens
   return ([] as T[]).concat(...arr);
 }
-
-
-
