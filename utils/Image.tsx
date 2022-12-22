@@ -1,41 +1,63 @@
-import ExportedImage from 'next-image-export-optimizer';
 import { useMemo } from 'react';
-import classNames from 'classnames';
 import { ImageSize } from 'ts-exif-parser';
+import classNames from 'classnames';
 import { useLink } from './useLink';
 import { Styleable } from '../types/Styleable';
+
+const IMAGE_SIZES = [20];
+const DEVICE_SIZES = [400, 700, 1200, 2050];
+const ALL_SIZES = [...IMAGE_SIZES, ...DEVICE_SIZES];
 
 export function Image({
   alt,
   size,
   className,
-  filename,
-  ext = '.jpg',
+  filename: baseFilename,
   breakpoints,
 }: {
   filename: string,
-  ext?: string
   alt?: string,
   size?: ImageSize,
   breakpoints?: ImageBreakpoints
 } & Pick<Styleable, 'className'>) {
-  const src = useLink(`images/${filename}${ext}`);
-  const nextImage = useMemo(() => (
-    <ExportedImage
-      className="h-full w-full object-contain"
-      fill
-      src={src}
-      alt={alt ?? `${filename}.jpg`}
-      sizes={buildSizeString(breakpoints)}
-    />
-  ), [alt, filename, breakpoints, src]);
+  const filename = useLink(`${baseFilename}`).replaceAll('\\', '/');
+
+  const nextImage = useMemo(() => {
+    let start = filename.lastIndexOf('/');
+    if (start < 0) start = filename.lastIndexOf('\\');
+    const realFilename = start > 0 ? filename.substring(start) : filename;
+    const realFolderName = start > 0 ? `/${filename.substring(0, start + 1)}` : '';
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        alt={alt ?? realFilename}
+        sizes={buildSizeString(breakpoints)}
+        srcSet={computeSrcSet(realFolderName, realFilename)}
+        decoding="async"
+        className={classNames('absolute inset-0 h-full w-full bg-cover object-contain backdrop-blur-2xl', className)}
+        loading="lazy"
+        style={{ backgroundImage: `url(${computeFileName(realFolderName, realFilename, IMAGE_SIZES[0])})` }}
+      />
+    );
+  }, [alt, breakpoints, className, filename]);
 
   const paddingTop = useImagePadding(size);
   return (
-    <div style={{ paddingTop }} className={classNames('relative overflow-hidden', className)}>
+    <div
+      style={{ paddingTop }}
+      className={classNames('relative overflow-hidden', className)}
+    >
       {nextImage}
     </div>
   );
+}
+
+function computeSrcSet(realFolderName: string, realFilename: string) {
+  return DEVICE_SIZES.map((s) => `${computeFileName(realFolderName, realFilename, s)} ${s}w`).join(', ');
+}
+
+function computeFileName(realFolderName: string, realFilename: string, size:number) {
+  return `/images${realFolderName}/nextImageExportOptimizer${realFilename}-opt-${size}.WEBP`;
 }
 
 export type ImageBreakpoints = Record<Breakpoint, number>;
