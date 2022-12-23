@@ -21,7 +21,7 @@ export async function readImageInternal(filename: string, imageFolder: string = 
   const jsonMetadata: JsonMetadata = JSON.parse(await fs.readFile(path.join(metadataFolder, `${jsonFileName}.json`), 'utf8'));
   const metadata: Metadata = {
     ...jsonMetadata,
-    created: exif.tags?.CreateDate,
+    created: exif.tags?.CreateDate ?? null,
   };
   return {
     size: exif.getImageSize(),
