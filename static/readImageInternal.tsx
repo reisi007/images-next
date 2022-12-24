@@ -18,7 +18,7 @@ export async function readImageInternal(filename: string, metadataFolder: string
 
   const metadata: Metadata = {
     ...jsonMetadata,
-    created: exif.CREATION_DATETIME,
+    created: exif.CREATION_DATETIME ?? null,
   };
   return {
     size: {
