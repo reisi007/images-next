@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
-import { ImageSize } from 'ts-exif-parser';
 import classNames from 'classnames';
 import { useLink } from './useLink';
 import { Styleable } from '../types/Styleable';
+import { ImageInfo, ImageSize } from '../types/ImageTypes';
 
 const IMAGE_SIZES = [20];
 const DEVICE_SIZES = [400, 700, 1200, 2050];
-const ALL_SIZES = [...IMAGE_SIZES, ...DEVICE_SIZES];
+
+export const SORT_NEWEST_TO_OLDEST = ([_, a]:[string, ImageInfo], [, b]:[string, ImageInfo]) => -(a.metadata.created ?? '').localeCompare(b.metadata.created ?? '');
 
 export function Image({
   alt,

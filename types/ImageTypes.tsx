@@ -1,4 +1,5 @@
-export type ImageInfo = { size: { width: number, height: number }, metadata: Metadata };
+export type ImageSize = { width: number, height: number };
+export type ImageInfo = { size: ImageSize, metadata: Metadata };
 export type Metadata = JsonMetadata & { created: string | null };
 export type JsonMetadata = { title: string, tags: Array<string> };
 export type MetadataMap<F extends string> = Record<F, ImageInfo>;

@@ -2,10 +2,9 @@ import classNames from 'classnames';
 import {
   CSSProperties, MouseEventHandler, TouchEventHandler, useCallback, useState,
 } from 'react';
-import { ImageSize } from 'ts-exif-parser';
-import { ImageInfo } from '../types/ImageTypes';
+import { ImageInfo, ImageSize } from '../types/ImageTypes';
 import {
-  Breakpoint, ImageBreakpoints, useImagePadding, Image,
+  Breakpoint, Image, ImageBreakpoints, SORT_NEWEST_TO_OLDEST, useImagePadding,
 } from '../utils/Image';
 import { Styleable } from '../types/Styleable';
 
@@ -81,11 +80,11 @@ const BEFORE_AFTER_BREAKPOINTS: ImageBreakpoints = {
 };
 
 export function MultipleBeforeAfterImages<T extends string>({ data }: { data: Record<T, ImageInfo> }) {
-  const entries :Array<[string, ImageInfo]> = Object.entries(data);
+  const entries: Array<[string, ImageInfo]> = Object.entries(data);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
       {entries
-        .sort(([_, a], [,b]) => -((a.metadata.created ?? -1) - (b.metadata.created ?? -1))) // Sort from newest to oldest
+        .sort(SORT_NEWEST_TO_OLDEST) // Sort from newest to oldest
         .map(([name, info]) => <BeforeAfterImage className="h-full" size={info.size} key={name} name={name} breakpoints={BEFORE_AFTER_BREAKPOINTS} data={info} />)}
     </div>
   );
