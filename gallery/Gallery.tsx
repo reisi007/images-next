@@ -16,15 +16,15 @@ const GALLERY_IMAGE_BREAKPOINTS: ImageBreakpoints = {
 export function Gallery({
   images,
   className,
-  initialLoadedImages = 0,
+  initialLoadedImages = 4,
   loadImageStepSize = 4,
 }: { images: Array<[string, ImageInfo]>, initialLoadedImages?: number, loadImageStepSize?: number } & Pick<Styleable, 'className'>) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [length, setLength] = useState(initialLoadedImages);
 
+  const curDiv = ref.current;
   useEffect(() => {
-    const curDiv = ref.current;
     if (curDiv === null) {
       return () => {
       };
@@ -35,7 +35,7 @@ export function Gallery({
     );
     observer.observe(curDiv);
     return () => observer.unobserve(curDiv);
-  }, [images.length, loadImageStepSize]);
+  }, [curDiv, images.length, loadImageStepSize]);
 
   return (
     <>

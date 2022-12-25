@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { ReactNode, RefObject } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReisishotIcon, ReisishotIcons, ReisishotIconSizes } from '../utils/ReisishotIcons';
 
-export function Footer() {
+export function Footer({
+  children,
+  innerRef,
+}: { children?: ReactNode } & { innerRef?: RefObject<HTMLElement> }) {
   const router = useRouter();
   return (
-    <footer>
+    <footer ref={innerRef}>
+      {children}
       <div className="mt-4 flex w-full justify-around">
         <a href="https://www.facebook.com/reisishot">
           <ReisishotIcon icon={ReisishotIcons.Facebook} size={ReisishotIconSizes.LARGE} />
