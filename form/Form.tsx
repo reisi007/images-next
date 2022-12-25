@@ -1,8 +1,8 @@
 import {
-  DeepPartial, FieldPath, FormState, SubmitHandler, useForm,
+  Control, DeepPartial, FormState, Resolver, SubmitHandler, useForm,
 } from 'react-hook-form';
-import { ReactNode } from 'react';
-import { UseFormRegister, UseFormRegisterReturn } from 'react-hook-form/dist/types/form';
+import { ReactNode, useCallback } from 'react';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form/dist/types/form';
 import { Styleable } from '../types/Styleable';
 
 export function Form<T extends object>({
@@ -10,17 +10,22 @@ export function Form<T extends object>({
   initialValue,
   children,
   className,
+  resolver,
   style,
 }: FormConfig<T> & Partial<Styleable>) {
   const {
+    control,
+    reset,
     register,
     handleSubmit,
     formState,
-  } = useForm<T>({ defaultValues: initialValue });
+    setValue,
+  } = useForm<T>({ defaultValues: initialValue, resolver, mode: 'all' });
 
+  const onReset = useCallback(() => reset(), [reset]);
   return (
-    <form className={className} style={style} onSubmit={handleSubmit(onSubmit)}>
-      {children(formState, register)}
+    <form className={className} style={style} onReset={onReset} onSubmit={handleSubmit(onSubmit)}>
+      {children(formState, register, control, setValue)}
     </form>
   );
 }
@@ -28,7 +33,8 @@ export function Form<T extends object>({
 type FormConfig<T extends object> = {
   initialValue: DeepPartial<T>
   onSubmit: SubmitHandler<T>,
-  children: (state: FormState<T>, register: UseFormRegister<T>) => ReactNode
+  resolver: Resolver<T>,
+  children: (state: FormState<T>, register: UseFormRegister<T>, control: Control<T>, setValue: UseFormSetValue<T>) => ReactNode,
 };
 
-export type RegisterProps<T extends object, N extends FieldPath<T>> = UseFormRegisterReturn<N>;
+export type FormChildrenProps<T extends object> = { formState: FormState<T>, register: UseFormRegister<T>, control: Control<T>, setValue: UseFormSetValue<T> };

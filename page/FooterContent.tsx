@@ -1,16 +1,12 @@
-import React, { ReactNode, RefObject } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReisishotIcon, ReisishotIcons, ReisishotIconSizes } from '../utils/ReisishotIcons';
 
-export function Footer({
-  children,
-  innerRef,
-}: { children?: ReactNode } & { innerRef?: RefObject<HTMLElement> }) {
+export function FooterContent() {
   const router = useRouter();
   return (
-    <footer ref={innerRef}>
-      {children}
+    <>
       <div className="mt-4 flex w-full justify-around">
         <a href="https://www.facebook.com/reisishot">
           <ReisishotIcon icon={ReisishotIcons.Facebook} size={ReisishotIconSizes.LARGE} />
@@ -29,6 +25,6 @@ export function Footer({
         </a>
       </div>
       {router.pathname !== '/impressum' && <Link className="block py-2 text-center" href="/impressum">Impressum & Datenschutz</Link>}
-    </footer>
+    </>
   );
 }

@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Breakpoint, Image, ImageBreakpoints } from '../utils/Image';
 import { ImageInfo } from '../types/ImageTypes';
 import { Styleable } from '../types/Styleable';
+import { useIntersection } from '../../utils/UseIntersection';
 
 const GALLERY_IMAGE_BREAKPOINTS: ImageBreakpoints = {
   [Breakpoint.default]: 1,
@@ -23,19 +24,7 @@ export function Gallery({
 
   const [length, setLength] = useState(initialLoadedImages);
 
-  const curDiv = ref.current;
-  useEffect(() => {
-    if (curDiv === null) {
-      return () => {
-      };
-    }
-    const observer = new IntersectionObserver(
-      () => setLength((o) => Math.min(o + loadImageStepSize, images.length)),
-      { rootMargin: '-300px 0px 300px 0px' },
-    );
-    observer.observe(curDiv);
-    return () => observer.unobserve(curDiv);
-  }, [curDiv, images.length, loadImageStepSize]);
+  useIntersection(ref, useCallback(() => setLength((o) => Math.min(o + loadImageStepSize, images.length)), [images.length, loadImageStepSize]));
 
   return (
     <>
