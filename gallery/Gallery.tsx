@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Breakpoint, Image, ImageBreakpoints } from '../utils/Image';
 import { ImageInfo } from '../types/ImageTypes';
 import { Styleable } from '../types/Styleable';
@@ -20,11 +20,9 @@ export function Gallery({
   initialLoadedImages = 4,
   loadImageStepSize = 4,
 }: { images: Array<[string, ImageInfo]>, initialLoadedImages?: number, loadImageStepSize?: number } & Pick<Styleable, 'className'>) {
-  const ref = useRef<HTMLDivElement>(null);
-
   const [length, setLength] = useState(initialLoadedImages);
 
-  useIntersection(ref, useCallback(() => setLength((o) => Math.min(o + loadImageStepSize, images.length)), [images.length, loadImageStepSize]));
+  const ref = useIntersection(useCallback(() => setLength((o) => Math.min(o + loadImageStepSize, images.length)), [images.length, loadImageStepSize]));
 
   return (
     <>
