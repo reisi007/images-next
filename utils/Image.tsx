@@ -38,7 +38,7 @@ export function Image({
         sizes={buildSizeString(breakpoints)}
         srcSet={computeSrcSet(realFolderName, realFilename)}
         decoding="async"
-        className={classNames('absolute inset-0 h-full w-full bg-cover object-contain backdrop-blur-2xl', className)}
+        className={classNames('absolute inset-0 bg-center h-full w-full bg-cover object-contain backdrop-blur-2xl', className)}
         loading="lazy"
         style={{ backgroundImage: `url(${computeFileName(realFolderName, realFilename, IMAGE_SIZES[0])})` }}
       />
