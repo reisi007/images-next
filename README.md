@@ -5,7 +5,7 @@
 # Update from remote
 
 ````
-git submodule update --recursive --remote
+git submodule update --remote --merge
 ````
 
 ## SETUP
