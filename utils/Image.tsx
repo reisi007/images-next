@@ -7,7 +7,7 @@ import { ImageInfo, ImageSize } from '../types/ImageTypes';
 const IMAGE_SIZES = [20];
 const DEVICE_SIZES = [400, 700, 1200, 2050];
 
-export const SORT_NEWEST_TO_OLDEST = ([_, a]:[string, ImageInfo], [, b]:[string, ImageInfo]) => -(a.metadata.created ?? '').localeCompare(b.metadata.created ?? '');
+export const SORT_NEWEST_TO_OLDEST = ([_, a]: [string, ImageInfo], [, b]: [string, ImageInfo]) => -(a.metadata.created ?? '').localeCompare(b.metadata.created ?? '');
 
 export function Image({
   alt,
@@ -15,13 +15,16 @@ export function Image({
   className,
   filename: baseFilename,
   breakpoints,
+  moreHeightConstraints,
 }: {
   filename: string,
   alt?: string,
   size?: ImageSize,
+  moreHeightConstraints?: string,
   breakpoints?: ImageBreakpoints
 } & Pick<Styleable, 'className'>) {
-  const filename = useLink(`${baseFilename}`).replaceAll('\\', '/');
+  const filename = useLink(`${baseFilename}`)
+    .replaceAll('\\', '/');
 
   const nextImage = useMemo(() => {
     let start = filename.lastIndexOf('/');
@@ -31,7 +34,7 @@ export function Image({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        alt={alt ?? realFilename}
+        alt={alt ?? realFilename.substring(0)}
         sizes={buildSizeString(breakpoints)}
         srcSet={computeSrcSet(realFolderName, realFilename)}
         decoding="async"
@@ -42,7 +45,7 @@ export function Image({
     );
   }, [alt, breakpoints, className, filename]);
 
-  const paddingTop = useImagePadding(size);
+  const paddingTop = useImagePadding(size, moreHeightConstraints);
   return (
     <div
       style={{ paddingTop }}
@@ -54,10 +57,11 @@ export function Image({
 }
 
 function computeSrcSet(realFolderName: string, realFilename: string) {
-  return DEVICE_SIZES.map((s) => `${computeFileName(realFolderName, realFilename, s)} ${s}w`).join(', ');
+  return DEVICE_SIZES.map((s) => `${computeFileName(realFolderName, realFilename, s)} ${s}w`)
+    .join(', ');
 }
 
-function computeFileName(realFolderName: string, realFilename: string, size:number) {
+function computeFileName(realFolderName: string, realFilename: string, size: number) {
   return `/images${realFolderName}/nextImageExportOptimizer${realFilename}-opt-${size}.WEBP`;
 }
 
