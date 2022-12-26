@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { Breakpoint, Image, ImageBreakpoints } from '../utils/Image';
 import { ImageInfo } from '../types/ImageTypes';
 import { Styleable } from '../types/Styleable';
-import { useIntersection } from '../../utils/UseIntersection';
+import { useIntersection } from '../utils/UseIntersection';
 
 const GALLERY_IMAGE_BREAKPOINTS: ImageBreakpoints = {
   [Breakpoint.default]: 1,
