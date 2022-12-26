@@ -3,7 +3,7 @@ import {
   Control, Controller, FieldError, FieldPath, FieldPathValue,
 } from 'react-hook-form';
 import classNames from 'classnames';
-import { FiveStarRating } from '../../rating/FiveStarRating';
+import { FiveStarRating } from '../rating/FiveStarRating';
 import { ReisishotIconSizes } from '../utils/ReisishotIcons';
 import { Styleable } from '../types/Styleable';
 
