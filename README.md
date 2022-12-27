@@ -4,8 +4,10 @@
 
 # Update from remote
 
+(im Submodule)
+
 ````
-git submodule update --remote --merge
+git pull
 ````
 
 ## SETUP

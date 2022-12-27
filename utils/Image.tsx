@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import classNames from 'classnames';
+import Link from 'next/link';
 import { useLink } from './useLink';
 import { Styleable } from '../types/Styleable';
 import { ImageInfo, ImageSize } from '../types/ImageTypes';
@@ -9,6 +10,14 @@ const DEVICE_SIZES = [400, 700, 1200, 2050];
 
 export const SORT_NEWEST_TO_OLDEST = ([_, a]: [string, ImageInfo], [, b]: [string, ImageInfo]) => -(a.metadata.created ?? '').localeCompare(b.metadata.created ?? '');
 
+type ImageProps = {
+  filename: string,
+  alt?: string,
+  size?: ImageSize,
+  moreHeightConstraints?: string,
+  breakpoints?: ImageBreakpoints
+} & Pick<Styleable, 'className'>;
+
 export function Image({
   alt,
   size,
@@ -16,13 +25,7 @@ export function Image({
   filename: baseFilename,
   breakpoints,
   moreHeightConstraints,
-}: {
-  filename: string,
-  alt?: string,
-  size?: ImageSize,
-  moreHeightConstraints?: string,
-  breakpoints?: ImageBreakpoints
-} & Pick<Styleable, 'className'>) {
+}: ImageProps) {
   const filename = useLink(`${baseFilename}`)
     .replaceAll('\\', '/');
 
@@ -53,6 +56,19 @@ export function Image({
     >
       {nextImage}
     </div>
+  );
+}
+
+export function ImageWithText({
+  text,
+  url,
+  ...imageProps
+}: ImageProps & { text: string, url: string }) {
+  return (
+    <Link href={url} className="black relative">
+      <Image {...imageProps} />
+      <span className="absolute inset-x-0 bottom-0 bg-black/60 p-2 text-center text-xl text-white">{text}</span>
+    </Link>
   );
 }
 
