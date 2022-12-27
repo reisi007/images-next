@@ -7,14 +7,17 @@ import { asyncMap } from '../utils/asyncFlatMap';
 
 export const DIRECTORY_IMAGE = path.join(process.cwd(), 'public', 'images');
 
+export async function readExifJsonInternal(filename: string, metadataFolder: string = DIRECTORY_IMAGE): Promise<JsonExifMetadata> {
+  return JSON.parse(await fs.readFile(path.join(metadataFolder, `${path.basename(filename)}.exif.json`), 'utf8'));
+}
+
 export async function readImageInternal(filename: string, metadataFolder: string = DIRECTORY_IMAGE): Promise<ImageInfo> {
-  const jsonFileName = path.basename(filename);
   const {
     exif,
     width,
     height,
-  }: JsonExifMetadata = JSON.parse(await fs.readFile(path.join(metadataFolder, `${jsonFileName}.exif.json`), 'utf8'));
-  const jsonMetadata: JsonMetadata = JSON.parse(await fs.readFile(path.join(metadataFolder, `${jsonFileName}.json`), 'utf8'));
+  } = await readExifJsonInternal(filename, metadataFolder);
+  const jsonMetadata: JsonMetadata = JSON.parse(await fs.readFile(path.join(metadataFolder, `${path.basename(filename)}.json`), 'utf8'));
 
   const metadata: Metadata = {
     ...jsonMetadata,
