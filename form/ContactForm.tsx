@@ -43,14 +43,14 @@ function ContactFormContent({
   return (
     <>
       {!isSubmitSuccessful && (
-        <div className="grid md:grid-cols-2">
-          <Input label="Vorname" control={control} errorMessage={errors.firstName} required className="mr-1" {...register('firstName')} />
-          <Input label="Nachname" control={control} errorMessage={errors.lastName} required className="ml-1" {...register('lastName')} />
-          <Input label="E-Mail" control={control} errorMessage={errors.email} required {...register('email')} type="email" className="col-span-2" />
-          <Input label="Handynummer" control={control} errorMessage={errors.tel} {...register('tel')} type="tel" className="col-span-2" />
-          <Input control={control} label="Betreff" required errorMessage={errors.subject} {...register('subject')} type="text" className="col-span-2" />
-          <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} type="tel" className="col-span-2" />
-          <ActionButton type="submit" disabled={!isValid || !isDirty || isSubmitting} className="col-span-2 mt-4 bg-primary text-onPrimary">Absenden</ActionButton>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <Input label="Vorname" control={control} errorMessage={errors.firstName} required className="md:mr-1" {...register('firstName')} />
+          <Input label="Nachname" control={control} errorMessage={errors.lastName} required className="md:ml-1" {...register('lastName')} />
+          <Input label="E-Mail" control={control} errorMessage={errors.email} required {...register('email')} type="email" className="md:col-span-2" />
+          <Input label="Handynummer" control={control} errorMessage={errors.tel} {...register('tel')} type="tel" className="md:col-span-2" />
+          <Input control={control} label="Betreff" required errorMessage={errors.subject} {...register('subject')} type="text" className="md:col-span-2" />
+          <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} type="tel" className="md:col-span-2" />
+          <ActionButton type="submit" disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</ActionButton>
         </div>
       )}
       {isSubmitSuccessful && <h2>Das Formular wurde erfolgreich gesendet. Danke für deine Nachticht!</h2>}
