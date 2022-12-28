@@ -2,7 +2,7 @@
     @apply mx-auto box-content w-11/12 sm:w-[540px] md:w-[720px] lg:w-[960px] xl:w-[1140px] 2xl:w-[1320px]
 }
 
-.first-letter {
-    @apply first-letter:float-left first-letter:mr-3 first-letter:text-5xl first-letter:font-bold first-letter:text-primary
+.firstLetter {
+    @apply first-letter:font-logo first-letter:float-left first-letter:mr-3 first-letter:text-5xl first-letter:font-bold first-letter:text-primary
 }
 
