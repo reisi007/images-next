@@ -1,0 +1,3 @@
+.button {
+    @apply p-2 border duration-150 rounded-lg focus:ring disabled:opacity-75 disabled:bg-gray-600 disabled:text-gray-200
+}
