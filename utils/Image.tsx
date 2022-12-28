@@ -67,7 +67,7 @@ export function ImageWithText({
   return (
     <Link href={url} className="black relative">
       <Image {...imageProps} />
-      <span className="absolute inset-x-0 bottom-0 bg-black/60 p-2 text-center text-xl text-white">{text}</span>
+      <span className="absolute inset-x-0 bottom-0 bg-black/60 p-2 text-center font-logo text-xl text-white">{text}</span>
     </Link>
   );
 }
