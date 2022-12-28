@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Styleable } from '../types/Styleable';
+import { FONT_ICONS } from '../fonts/Font';
 
 export enum ReisishotIcons {
   Facebook = 'rs-facebook',
@@ -32,6 +33,5 @@ export function ReisishotIcon({
   className,
   ...props
 }: { icon: ReisishotIcons, size?: ReisishotIconSizes } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Styleable>) {
-  const classes = classNames('icon', icon, size, className);
-  return <i {...props} className={classes}>{children}</i>;
+  return <i {...props} className={classNames(FONT_ICONS.className, 'icon', icon, size, className)}>{children}</i>;
 }

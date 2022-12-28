@@ -1,6 +1,7 @@
 import { MouseEvent, useCallback } from 'react';
 import classNames from 'classnames';
 import { ReisishotIconSizes } from '../utils/ReisishotIcons';
+import { FONT_ICONS } from '../fonts/Font';
 
 type Props = { starSize: ReisishotIconSizes, className?: string, halfStar: boolean, fullStars: number, totalStars: number, setStars?: (fullStars: number, halfStar: boolean) => void };
 
@@ -41,7 +42,7 @@ export function StarRating(
 
   return (
     <span
-      className={classNames('text-gold', className)}
+      className={classNames('text-gold', FONT_ICONS.className, className)}
     >
       {
         Array.from({ length: fullStars }, (_, idx) => idx)
