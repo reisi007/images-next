@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReisishotIcon, ReisishotIcons, ReisishotIconSizes } from '../utils/ReisishotIcons';
 
-export function FooterContent() {
+export function Footer() {
   const router = useRouter();
   return (
     <>

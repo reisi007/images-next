@@ -42,7 +42,7 @@ export function StarRating(
 
   return (
     <span
-      className={classNames('text-gold', FONT_ICONS.className, className)}
+      className={classNames('text-gold inline-flex justify-center', FONT_ICONS.className, className)}
     >
       {
         Array.from({ length: fullStars }, (_, idx) => idx)

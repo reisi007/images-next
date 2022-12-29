@@ -44,5 +44,5 @@ export function useModal(title: string, content?: (setVisible: Dispatch<SetState
       {(setVisibility) => content !== undefined && content(setVisibility)}
     </Modal>
   );
-  return [modal, setVisible] as const;
+  return [modal, setVisible, isVisible] as const;
 }

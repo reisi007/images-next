@@ -53,7 +53,15 @@ function ContactFormContent({
           <ActionButton type="submit" disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</ActionButton>
         </div>
       )}
-      {isSubmitSuccessful && <h2>Das Formular wurde erfolgreich gesendet. Danke für deine Nachticht!</h2>}
+      {isSubmitSuccessful && (
+      <>
+        <h2 className="mb-2">Das Formular wurde erfolgreich gesendet. Danke für deine Nachticht!</h2>
+        <div className="flex justify-center">
+          {' '}
+          <ActionButton className="my-1" type="reset">Leeres Formular anzeigen</ActionButton>
+        </div>
+      </>
+      )}
     </>
   );
 }
