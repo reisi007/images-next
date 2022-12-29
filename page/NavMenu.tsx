@@ -19,7 +19,7 @@ export function NavMenu({ title, menuItems }: NavMenuProps) {
   const classes = 'grid grid-cols-1 md:grid-cols-2';
 
   return (
-    <nav className={classNames('mb-4 bg-primary p-4 text-onPrimary', styles.container)}>
+    <nav className={classNames('w-full bg-primary p-4 text-onPrimary', styles.container)}>
       <div className="flex w-full">
         <div className="w-full font-logo">
           <h1 className="w-full pb-2 text-center">{title}</h1>

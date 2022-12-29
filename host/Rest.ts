@@ -1,8 +1,6 @@
-import React from 'react';
-
 const Rest = 'https://selfservice-backend.reisinger.pictures';
 
-export async function sendPost<Body extends object>(internalUrl: string, body: Body): Promise<boolean> {
+export async function sendPost<Body extends object>(internalUrl: string, body: Body) {
   let url: string;
   if (internalUrl.startsWith('http')) {
     url = internalUrl;
@@ -20,15 +18,15 @@ export async function sendPost<Body extends object>(internalUrl: string, body: B
     },
   );
 
-  return response.ok;
+  if (!response.ok) throw Error(`Response failed with code ${response.status}`);
 }
 
-export async function submitToEmail(data: EmailSubmittable, event?: React.BaseSyntheticEvent): Promise<boolean> {
-  event?.preventDefault();
+export async function submitToEmail(data: EmailSubmittable) {
   return sendPost('https://api.reisinger.pictures/email.php', data);
 }
 
 export type EmailSubmittable = {
   email: string,
   subject: string
+  message: string
 };

@@ -7,6 +7,7 @@ import { Form, FormChildrenProps, PHONE_REGEXP } from './Form';
 import { Styleable } from '../types/Styleable';
 import { Input, Textarea } from './Input';
 import { ActionButton } from '../button/ActionButton';
+import { CommonFormFields } from './Url2Form';
 
 export function ContactForm({
   className,
@@ -49,18 +50,18 @@ function ContactFormContent({
           <Input label="E-Mail" control={control} errorMessage={errors.email} required {...register('email')} type="email" className="md:col-span-2" />
           <Input label="Handynummer" control={control} errorMessage={errors.tel} {...register('tel')} type="tel" className="md:col-span-2" />
           <Input control={control} label="Betreff" required errorMessage={errors.subject} {...register('subject')} type="text" className="md:col-span-2" />
-          <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} type="tel" className="md:col-span-2" />
+          <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} required type="tel" className="md:col-span-2" />
           <ActionButton type="submit" disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</ActionButton>
         </div>
       )}
       {isSubmitSuccessful && (
-      <>
-        <h2 className="mb-2">Das Formular wurde erfolgreich gesendet. Danke für deine Nachticht!</h2>
-        <div className="flex justify-center">
-          {' '}
-          <ActionButton className="my-1" type="reset">Leeres Formular anzeigen</ActionButton>
-        </div>
-      </>
+        <>
+          <h2 className="my-2">Das Formular wurde erfolgreich gesendet. Danke für deine Nachticht!</h2>
+          <div className="flex justify-center">
+            {' '}
+            <ActionButton className="my-1" type="reset">Leeres Formular anzeigen</ActionButton>
+          </div>
+        </>
       )}
     </>
   );
@@ -83,9 +84,4 @@ const contractFormResolver = yupResolver(yup.object(
 )
   .required());
 
-export type ContactFormMessage = EmailSubmittable & {
-  firstName: string
-  lastName: string
-  tel: string
-  message: string
-};
+export type ContactFormMessage = EmailSubmittable & CommonFormFields;

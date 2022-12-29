@@ -90,7 +90,7 @@ export function FiveStarInput<T extends object, P extends FieldPath<T>>({
       }) => (
         <div className={classNames(className, 'flex flex-col')}>
           <Label id={id} label={label} required={props.required} />
-          <FiveStarRating starSize={starSize} value={value ?? 0} onChange={onChange} />
+          <FiveStarRating className="inline-flex" starSize={starSize} value={value ?? 0} onChange={onChange} />
           {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
         </div>
       )}

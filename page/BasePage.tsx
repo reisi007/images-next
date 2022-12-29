@@ -10,11 +10,12 @@ import { ContactForm } from '../form/ContactForm';
 import styles from '../utils/Utils.module.css';
 import { FONT_MARTINA } from '../fonts/Font';
 
-export type BasePageProps = { children: ReactNode, className?: string };
+export type BasePageProps = { children: ReactNode, className?: string, showContactForm?:boolean };
 
 export function BasePage({
   children,
   className,
+  showContactForm = true,
   ...headerProps
 }: BasePageProps & HeaderProps) {
   const [isFabVisible, setFabVisible] = useState(true);
@@ -35,8 +36,12 @@ export function BasePage({
         {children}
       </main>
       <footer className="mt-4 mb-2" ref={ref}>
-        <h2>Kontaktere mich</h2>
-        <ContactForm className={classNames(styles.container, 'pt-6')} />
+        { showContactForm && (
+        <>
+          <h2>Kontaktere mich</h2>
+          <ContactForm className={classNames(styles.container, 'pt-6')} />
+        </>
+        )}
         <Footer />
       </footer>
       {dialog}
