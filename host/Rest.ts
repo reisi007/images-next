@@ -1,11 +1,11 @@
-const Rest = 'https://selfservice-backend.reisinger.pictures';
+export const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL;
 
 export async function sendPost<Body extends object>(internalUrl: string, body: Body) {
   let url: string;
   if (internalUrl.startsWith('http')) {
     url = internalUrl;
   } else {
-    url = `${Rest}/${internalUrl}`;
+    url = `${ROOT_URL}/${internalUrl}`;
   }
   const response = await fetch(
     url,

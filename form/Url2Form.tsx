@@ -20,7 +20,7 @@ export function useSetValue<T extends CommonFormFields>(label: FieldPath<CommonF
   }, [label, queryValue, setValue]);
 }
 
-function ensureString(input: string | Array<string> | undefined): string | undefined {
+export function ensureString(input: string | Array<string> | undefined): string | undefined {
   if (Array.isArray(input)) return input.join(',');
   return input;
 }

@@ -1,4 +1,4 @@
-import { HTMLProps, useId } from 'react';
+import { HTMLProps, ReactNode, useId } from 'react';
 import {
   Control, Controller, FieldError, FieldPath, FieldPathValue,
 } from 'react-hook-form';
@@ -7,7 +7,7 @@ import { FiveStarRating } from '../rating/FiveStarRating';
 import { ReisishotIconSizes } from '../utils/ReisishotIcons';
 import { Styleable } from '../types/Styleable';
 
-type FieldProperties<T extends object, P extends FieldPath<T>> = { errorMessage?: FieldError, label: string, control: Control<T>, name: FieldPathValue<T, P> };
+type FieldProperties<T extends object, P extends FieldPath<T>> = { errorMessage?: FieldError, label: ReactNode, control: Control<T>, name: FieldPathValue<T, P> };
 
 export function Input<T extends object, P extends FieldPath<T> >({
   errorMessage,
@@ -31,6 +31,36 @@ export function Input<T extends object, P extends FieldPath<T> >({
         <div className={classNames(className, 'flex flex-col')}>
           <Label id={id} label={label} required={props.required} />
           <input {...props} value={value ?? ''} onChange={onChange} id={id} />
+          {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
+        </div>
+      )}
+    />
+  );
+}
+
+export function CheckboxInput<T extends object, P extends FieldPath<T> >({
+  errorMessage,
+  label,
+  name: fieldName,
+  className,
+  control,
+  ...props
+}: Omit<HTMLProps<HTMLInputElement>, 'type' | 'label'> & FieldProperties<T, P>) {
+  const id = useId();
+  return (
+    <Controller<T, P>
+      name={fieldName}
+      control={control}
+      render={({
+        field: {
+          value,
+          onChange,
+        },
+      }) => (
+        <div className={classNames(className, 'flex flex-col')}>
+          <Label id={id} label={label} required={props.required}>
+            <input {...props} checked={value === true} onChange={onChange} type="checkbox" id={id} />
+          </Label>
           {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
         </div>
       )}
@@ -102,9 +132,11 @@ function Label({
   required,
   label,
   id,
-}: { required?: boolean, id: string, label: string }) {
+  children,
+}: { required?: boolean, id: string, label: ReactNode, children?:ReactNode }) {
   return (
-    <label htmlFor={id}>
+    <label className="inline-flex" htmlFor={id}>
+      {children}
       {label}
       {' '}
       {required ? <span className="text-error">*</span> : false}
