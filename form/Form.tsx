@@ -4,6 +4,7 @@ import {
 import { FormEventHandler, ReactNode, useCallback } from 'react';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form/dist/types/form';
 import { Styleable } from '../types/Styleable';
+import { ManualRequestStatus } from '../host/Rest';
 
 export function Form<T extends object>({
   onSubmit,
@@ -15,12 +16,24 @@ export function Form<T extends object>({
 }: FormConfig<T> & Partial<Styleable>) {
   const {
     control,
-    reset,
+    reset: rawReset,
     register,
     handleSubmit,
     formState,
     setValue,
-  } = useForm<T>({ defaultValues: initialValue, resolver, mode: 'all' });
+  } = useForm<T>({
+    defaultValues: initialValue,
+    resolver,
+    mode: 'all',
+  });
+
+  const reset = useCallback(() => {
+    rawReset(undefined, {
+      keepIsSubmitted: false,
+      keepSubmitCount: false,
+      keepDefaultValues: true,
+    });
+  }, [rawReset]);
 
   const onReset = useCallback(() => reset(), [reset]);
   const formEventHandler: FormEventHandler<HTMLFormElement> = useCallback((event) => {
@@ -30,7 +43,7 @@ export function Form<T extends object>({
   }, [handleSubmit, onSubmit]);
   return (
     <form className={className} style={style} onReset={onReset} onSubmit={formEventHandler}>
-      {children(formState, register, control, setValue)}
+      {children(formState, register, control, setValue, reset)}
     </form>
   );
 }
@@ -41,7 +54,14 @@ type FormConfig<T extends object> = {
   initialValue?: DeepPartial<T>
   onSubmit: SubmitHandler<T>,
   resolver: Resolver<T>,
-  children: (state: FormState<T>, register: UseFormRegister<T>, control: Control<T>, setValue: UseFormSetValue<T>) => ReactNode,
+  children: (state: FormState<T>, register: UseFormRegister<T>, control: Control<T>, setValue: UseFormSetValue<T>, reset: () => void) => ReactNode,
 };
 
-export type FormChildrenProps<T extends object> = { formState: FormState<T>, register: UseFormRegister<T>, control: Control<T>, setValue: UseFormSetValue<T> };
+export type FormChildrenProps<T extends object> = {
+  formState: FormState<T>,
+  register: UseFormRegister<T>,
+  control: Control<T>,
+  setValue: UseFormSetValue<T>,
+  reset: () => void,
+  status: ManualRequestStatus
+};
