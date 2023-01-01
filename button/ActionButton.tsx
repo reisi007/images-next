@@ -1,8 +1,8 @@
 import { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
+import { FieldErrors } from 'react-hook-form';
 import { StyledButton } from './StyledButton';
 import { LoadingIndicator } from '../../rest/LoadingIndicator';
-import { ManualRequestStatus } from '../host/Rest';
 
 export function ActionButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const { className } = props;
@@ -13,17 +13,17 @@ export function ActionButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   return <StyledButton {...props} className={classes} />;
 }
 
-export function SubmitButton(rawProps:Omit< ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & { status: ManualRequestStatus }) {
+export function SubmitButton(rawProps:Omit< ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & { isSubmitting:boolean, errors: FieldErrors<{ server:string }> }) {
   const {
-    status, children, ...props
+    isSubmitting, errors, children, ...props
   } = rawProps;
-  const { isSubmitting, error } = status;
+  const error = errors.server;
 
   return (
     <ActionButton {...props} type="submit">
       {!isSubmitting && !error && children}
-      {isSubmitting && <LoadingIndicator />}
-      {!!error && JSON.stringify(error)}
+      {isSubmitting && <LoadingIndicator height="2rem" />}
+      {!!error && <span className="text-error">{error.message}</span>}
     </ActionButton>
   );
 }

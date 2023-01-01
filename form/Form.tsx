@@ -2,9 +2,10 @@ import {
   Control, DeepPartial, FormState, Resolver, SubmitHandler, useForm,
 } from 'react-hook-form';
 import { FormEventHandler, ReactNode, useCallback } from 'react';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form/dist/types/form';
+import {
+  UseFormClearErrors, UseFormRegister, UseFormSetError, UseFormSetValue,
+} from 'react-hook-form/dist/types/form';
 import { Styleable } from '../types/Styleable';
-import { ManualRequestStatus } from '../host/Rest';
 
 export function Form<T extends object>({
   onSubmit,
@@ -21,6 +22,8 @@ export function Form<T extends object>({
     handleSubmit,
     formState,
     setValue,
+    setError,
+    clearErrors,
   } = useForm<T>({
     defaultValues: initialValue,
     resolver,
@@ -35,12 +38,14 @@ export function Form<T extends object>({
     });
   }, [rawReset]);
 
+  const submitHandler: SubmitHandler<T> = useCallback((data, event) => onSubmit(data, setError, clearErrors, event), [clearErrors, onSubmit, setError]);
+
   const onReset = useCallback(() => reset(), [reset]);
   const formEventHandler: FormEventHandler<HTMLFormElement> = useCallback((event) => {
     event?.preventDefault();
-    handleSubmit(onSubmit)()
+    handleSubmit(submitHandler)()
       .catch((reason) => console.error(reason));
-  }, [handleSubmit, onSubmit]);
+  }, [handleSubmit, submitHandler]);
   return (
     <form className={className} style={style} onReset={onReset} onSubmit={formEventHandler}>
       {children(formState, register, control, setValue, reset)}
@@ -50,9 +55,10 @@ export function Form<T extends object>({
 
 export const PHONE_REGEXP = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
+export type ExtSubmitHandler<T extends object> = (data: T, setErrors: UseFormSetError<T>, clearErrors: UseFormClearErrors<T>, event?: React.BaseSyntheticEvent) => unknown;
 type FormConfig<T extends object> = {
   initialValue?: DeepPartial<T>
-  onSubmit: SubmitHandler<T>,
+  onSubmit: ExtSubmitHandler<T>,
   resolver: Resolver<T>,
   children: (state: FormState<T>, register: UseFormRegister<T>, control: Control<T>, setValue: UseFormSetValue<T>, reset: () => void) => ReactNode,
 };
@@ -62,6 +68,5 @@ export type FormChildrenProps<T extends object> = {
   register: UseFormRegister<T>,
   control: Control<T>,
   setValue: UseFormSetValue<T>,
-  reset: () => void,
-  status: ManualRequestStatus
+  reset: () => void
 };

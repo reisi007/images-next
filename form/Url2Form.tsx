@@ -3,7 +3,7 @@ import { UseFormSetValue } from 'react-hook-form/dist/types/form';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export type CommonFormFields = Record<'email' | 'firstName' | 'lastName' | 'tel', string>;
+export type CommonFormFields = Record<'email' | 'firstName' | 'lastName' | 'tel', string> & { server?:string };
 
 export function useSetValue<T extends CommonFormFields>(label: FieldPath<CommonFormFields>, setValue: UseFormSetValue<T>) {
   const { query } = useRouter();

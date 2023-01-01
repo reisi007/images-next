@@ -1,9 +1,11 @@
-import { DeepPartial, SubmitHandler } from 'react-hook-form';
+import { DeepPartial } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import React, { useCallback } from 'react';
 import { EmailSubmittable, useSendEmail } from '../host/Rest';
-import { Form, FormChildrenProps, PHONE_REGEXP } from './Form';
+import {
+  ExtSubmitHandler, Form, FormChildrenProps, PHONE_REGEXP,
+} from './Form';
 import { Styleable } from '../types/Styleable';
 import { Input, Textarea } from './Input';
 import { ActionButton, SubmitButton } from '../button/ActionButton';
@@ -15,18 +17,15 @@ export function ContactForm({
   moreOnSubmit,
   ...initialValue
 }: DeepPartial<ContactFormMessage> & Partial<Styleable> & { moreOnSubmit?: () => void }) {
-  const {
-    action,
-    ...sendEmail
-  } = useSendEmail();
-  const submit: SubmitHandler<ContactFormMessage> = useCallback(async (e) => {
+  const action = useSendEmail<ContactFormMessage>();
+  const submit: ExtSubmitHandler<ContactFormMessage> = useCallback((e, setErrors, clearErrors) => {
     if (moreOnSubmit !== undefined) moreOnSubmit();
-    action(e);
+    return action(e, setErrors, clearErrors);
   }, [action, moreOnSubmit]);
   return (
     <div className={className} style={style}>
       <Form<ContactFormMessage> initialValue={initialValue} onSubmit={submit} resolver={contractFormResolver}>
-        {(formState, register, control, setValue, reset) => <ContactFormContent status={sendEmail} formState={formState} register={register} control={control} setValue={setValue} reset={reset} />}
+        {(formState, register, control, setValue, reset) => <ContactFormContent formState={formState} register={register} control={control} setValue={setValue} reset={reset} />}
       </Form>
     </div>
   );
@@ -36,7 +35,6 @@ function ContactFormContent({
   formState,
   register,
   control,
-  status,
   reset,
 }: FormChildrenProps<ContactFormMessage>) {
   const {
@@ -57,7 +55,7 @@ function ContactFormContent({
           <Input label="Handynummer" control={control} errorMessage={errors.tel} {...register('tel')} type="tel" className="md:col-span-2" />
           <Input control={control} label="Betreff" required errorMessage={errors.subject} {...register('subject')} type="text" className="md:col-span-2" />
           <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} required type="tel" className="md:col-span-2" />
-          <SubmitButton status={status} disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</SubmitButton>
+          <SubmitButton errors={errors} isSubmitting={isSubmitting} disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</SubmitButton>
         </div>
       )}
       {isSubmitSuccessful && (

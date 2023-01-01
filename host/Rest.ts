@@ -1,22 +1,14 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { UseFormClearErrors, UseFormSetError } from 'react-hook-form/dist/types/form';
+import { FieldPath } from 'react-hook-form/dist/types/path';
 
 export const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL;
 
-export type ManualRequest<Body > = {
-  isSubmitting: boolean,
-  error?: unknown
-  action: (b: Body) => Promise<unknown>
-};
+export type ServerError = { server?: string };
+export type ManualRequest<Body extends object, Errors extends ServerError> = (b: Body, setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>) => Promise<unknown>;
 
-export type SyncManualRequest<Body> = Omit<ManualRequest<object>, 'action'> & { action:(b: Body) => void };
-
-export type ManualRequestStatus = Omit<ManualRequest<object>, 'action'>;
-
-export function useManualFetch<Body extends object>(internalUrl: string, method: 'post' | 'put' | 'delete' = 'post'): ManualRequest<Body> {
-  const [isSubmitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<unknown | undefined>(undefined);
-
-  const action = useCallback((body:Body) => {
+export function useManualFetch<Body extends ServerError, Error extends ServerError>(internalUrl: string, method: 'post' | 'put' | 'delete' = 'post'): ManualRequest<Body, Error> {
+  return useCallback((body: Body, setError: UseFormSetError<Error>, clearErrors: UseFormClearErrors<Error>) => {
     let url: string;
     if (internalUrl.startsWith('http')) {
       url = internalUrl;
@@ -24,8 +16,9 @@ export function useManualFetch<Body extends object>(internalUrl: string, method:
       url = `${ROOT_URL}/${internalUrl}`;
     }
 
-    setSubmitting(true);
-    setError(undefined);
+    // @ts-ignore Server is a valid field path for body...
+    const server: FieldPath<Error> = 'server';
+    clearErrors(server);
 
     return fetch(
       url,
@@ -37,24 +30,17 @@ export function useManualFetch<Body extends object>(internalUrl: string, method:
         },
       },
     )
-      .then((_) => {
-        setSubmitting(false);
-        setError(undefined);
-      }, (reason) => {
-        setSubmitting(false);
-        setError(reason);
+      .then((r) => r, (reason) => {
+        setError(server, {
+          type: 'server',
+          message: JSON.stringify(reason),
+        });
       });
   }, [internalUrl, method]);
-
-  return {
-    action,
-    isSubmitting,
-    error,
-  };
 }
 
-export function useSendEmail() {
-  return useManualFetch('https://api.reisinger.pictures/email.php');
+export function useSendEmail<T extends EmailSubmittable & ServerError>() {
+  return useManualFetch<T, T>('https://api.reisinger.pictures/email.php');
 }
 
 export type EmailSubmittable = {
