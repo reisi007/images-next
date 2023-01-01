@@ -16,12 +16,14 @@ type ImageProps = {
   size?: ImageSize,
   heightConstraint?: string,
   breakpoints?: ImageBreakpoints
+  onClick?: () => void
 } & Pick<Styleable, 'className'>;
 
 export function Image({
   alt,
   size,
   className,
+  onClick,
   filename: baseFilename,
   breakpoints,
   heightConstraint = '80vh',
@@ -52,6 +54,7 @@ export function Image({
   return (
     <div
       style={{ paddingTop }}
+      onClick={onClick}
       className={classNames('relative overflow-hidden', className)}
     >
       {nextImage}
