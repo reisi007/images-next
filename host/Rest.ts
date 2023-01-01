@@ -41,7 +41,7 @@ export function useManualFetch<Body extends ServerError, Error extends ServerErr
           message: JSON.stringify(reason),
         });
       });
-  }, [internalUrl, method]);
+  }, [header, internalUrl, method]);
 }
 
 export function useSendEmail<T extends EmailSubmittable & ServerError>() {
