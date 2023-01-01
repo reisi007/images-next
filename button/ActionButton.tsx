@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
 import { FieldErrors } from 'react-hook-form';
 import { StyledButton } from './StyledButton';
-import { LoadingIndicator } from '../../rest/LoadingIndicator';
+import { LoadingIndicator } from '../utils/LoadingIndicator';
 
 export function ActionButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const { className } = props;
