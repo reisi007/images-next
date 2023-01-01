@@ -10,12 +10,13 @@ export function ImageCaroussel<T extends string>({
   intervalMs = 7500,
   className,
   style,
-}: { intervalMs?: number, metadataMap: MetadataMap<T> } & Partial<Styleable>) {
+  heightConstraint = '80vw',
+}: { intervalMs?: number, metadataMap: MetadataMap<T>, heightConstraint? :string } & Partial<Styleable>) {
   const classes = classNames(className, 'rounded-lg');
   const items = useMemo(() => Object.keys(metadataMap) as Array<T>, [metadataMap]);
   const string = Object.keys(metadataMap)[0] as T;
   const containerImageMetadata = metadataMap[string];
-  const paddingTop = useImagePadding(containerImageMetadata?.size);
+  const paddingTop = useImagePadding(heightConstraint, containerImageMetadata?.size);
   const myStyle: CSSProperties = useMemo(() => {
     if (style === undefined) {
       return { paddingTop };
@@ -29,7 +30,7 @@ export function ImageCaroussel<T extends string>({
     <AbstractCaroussel<T> style={myStyle} intervalMs={intervalMs} className={classes} items={items}>
       {(cur) => {
         const metadata = metadataMap[cur];
-        return <CurImage className={classes} containerSize={containerSize} filename={cur} imageInfo={metadata} />;
+        return <CurImage heightConstraint={heightConstraint} className={classes} containerSize={containerSize} filename={cur} imageInfo={metadata} />;
       }}
     </AbstractCaroussel>
   );
@@ -40,9 +41,11 @@ function CurImage({
   containerSize,
   filename,
   className,
-}: { imageInfo: ImageInfo, containerSize?: ImageInfo, filename: string, className: string }) {
+  heightConstraint,
+}: { imageInfo: ImageInfo, heightConstraint: string, containerSize?: ImageInfo, filename: string, className: string }) {
   return (
     <Image
+      heightConstraint={heightConstraint}
       className={className}
       alt={imageInfo?.metadata?.title}
       size={(containerSize ?? imageInfo).size}

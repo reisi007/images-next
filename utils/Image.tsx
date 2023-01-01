@@ -14,7 +14,7 @@ type ImageProps = {
   filename: string,
   alt?: string,
   size?: ImageSize,
-  moreHeightConstraints?: string,
+  heightConstraint?: string,
   breakpoints?: ImageBreakpoints
 } & Pick<Styleable, 'className'>;
 
@@ -24,7 +24,7 @@ export function Image({
   className,
   filename: baseFilename,
   breakpoints,
-  moreHeightConstraints,
+  heightConstraint = '80vh',
 }: ImageProps) {
   const filename = useLink(`${baseFilename}`)
     .replaceAll('\\', '/');
@@ -37,7 +37,7 @@ export function Image({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        alt={alt ?? realFilename.substring(0)}
+        alt={alt ?? realFilename.substring(1)}
         sizes={buildSizeString(breakpoints)}
         srcSet={computeSrcSet(realFolderName, realFilename)}
         decoding="async"
@@ -48,7 +48,7 @@ export function Image({
     );
   }, [alt, breakpoints, className, filename]);
 
-  const paddingTop = useImagePadding(size, moreHeightConstraints);
+  const paddingTop = useImagePadding(heightConstraint, size);
   return (
     <div
       style={{ paddingTop }}
@@ -107,25 +107,22 @@ function buildSizeString(data?: ImageBreakpoints): string | undefined {
   return Object.entries(data)
     .sort(([a], [b]) => Number(b) - Number(a))
     .map(([key, cnt]) => {
-      if (key === '0') return `${100 / cnt}vw`;
-      return `(max-width: ${key}px) ${Number(key) / cnt}px`;
+      if (key === '0') return `calc(100vw / ${cnt})`;
+      return `(max-width: ${key}px) calc(${key}px / ${cnt})`;
     })
     .join(',');
 }
 
-const DEFAULT_IMAGE_HEIGHT = '80vh';
-
-export function useImagePadding(imageDimensions?: ImageSize, moreConstraints?: string) {
+export function useImagePadding(constraint: string, imageDimensions?: ImageSize) {
   return useMemo(() => {
     if (imageDimensions === undefined || imageDimensions === null) {
-      return DEFAULT_IMAGE_HEIGHT;
+      return constraint;
     }
 
     const {
       width,
       height,
     } = imageDimensions;
-    if (moreConstraints !== undefined) return `min(${DEFAULT_IMAGE_HEIGHT},${100 * (height / width)}%,${moreConstraints})`;
-    return `min(${DEFAULT_IMAGE_HEIGHT},${100 * (height / width)}%)`;
-  }, [imageDimensions, moreConstraints]);
+    return `min(${constraint},${100 * (height / width)}%)`;
+  }, [imageDimensions, constraint]);
 }

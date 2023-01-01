@@ -15,8 +15,9 @@ export function BeforeAfterImage({
   name,
   breakpoints,
   size,
-}: { data: ImageInfo, name: string, size: ImageSize, breakpoints: ImageBreakpoints } & Partial<Styleable>) {
-  const paddingTop = useImagePadding(data.size);
+  heightConstraint = '80vh',
+}: { data: ImageInfo, name: string, size: ImageSize, breakpoints: ImageBreakpoints, heightConstraint?: string } & Partial<Styleable>) {
+  const paddingTop = useImagePadding(heightConstraint, data.size);
   const [widthPercentage, setWidthPercentage] = useState(50);
   const beforeWidth = `${(100 / widthPercentage) * 100}%`;
 
@@ -43,12 +44,12 @@ export function BeforeAfterImage({
     >
       <div className="absolute inset-0 block w-full overflow-hidden">
         <div className={classNames(className, 'w-full h-full')}>
-          <Image alt={data.metadata.title} size={size} breakpoints={breakpoints} className={classNames(className, 'overflow-visible')} filename={name} />
+          <Image heightConstraint={heightConstraint} alt={data.metadata.title} size={size} breakpoints={breakpoints} className={classNames(className, 'overflow-visible')} filename={name} />
         </div>
       </div>
       <div className="absolute inset-0 z-10 block overflow-hidden" style={{ width: `${widthPercentage}%` }}>
         <div style={{ width: beforeWidth }} className={classNames('h-full', className)}>
-          <Image alt={`Original von ${data.metadata.title}`} size={size} breakpoints={breakpoints} className={className} filename={`${name}o`} />
+          <Image heightConstraint={heightConstraint} alt={`Original von ${data.metadata.title}`} size={size} breakpoints={breakpoints} className={className} filename={`${name}o`} />
         </div>
       </div>
       <div
