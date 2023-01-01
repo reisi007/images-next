@@ -7,7 +7,11 @@ export const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL;
 export type ServerError = { server?: string };
 export type ManualRequest<Body extends object, Errors extends ServerError> = (b: Body, setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>) => Promise<unknown>;
 
-export function useManualFetch<Body extends ServerError, Error extends ServerError>(internalUrl: string, method: 'post' | 'put' | 'delete' = 'post'): ManualRequest<Body, Error> {
+export function useManualFetch<Body extends ServerError, Error extends ServerError>(
+  internalUrl: string,
+  method: 'post' | 'put' | 'delete' = 'post',
+  header: HeadersInit = {},
+): ManualRequest<Body, Error> {
   return useCallback((body: Body, setError: UseFormSetError<Error>, clearErrors: UseFormClearErrors<Error>) => {
     let url: string;
     if (internalUrl.startsWith('http')) {
@@ -27,6 +31,7 @@ export function useManualFetch<Body extends ServerError, Error extends ServerErr
         body: JSON.stringify(body),
         headers: {
           'Content-Type': 'application/json',
+          ...header,
         },
       },
     )
