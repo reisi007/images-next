@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Breakpoint, Image, ImageBreakpoints } from '../utils/Image';
 import { ImageInfo } from '../types/ImageTypes';
@@ -16,20 +16,34 @@ const GALLERY_IMAGE_BREAKPOINTS: ImageBreakpoints = {
   [Breakpoint['2xl']]: 2,
 };
 
+export type GalleryProps = {
+  images: Array<[string, ImageInfo]>,
+  initialLoadedImages?: number,
+  loadImageStepSize?: number,
+  children?: (url: string) => ReactNode,
+} & Pick<Styleable, 'className'>;
+
 export function Gallery({
   images,
   className,
   initialLoadedImages = 4,
   loadImageStepSize = 4,
-}: { images: Array<[string, ImageInfo]>, initialLoadedImages?: number, loadImageStepSize?: number } & Pick<Styleable, 'className'>) {
+  children,
+}: GalleryProps) {
   const [length, setLength] = useState(initialLoadedImages);
-  const { push, query, pathname } = useRouter();
+  const {
+    push,
+    query,
+    pathname,
+  } = useRouter();
 
   const ref = useIntersection(useCallback(() => setLength((o) => Math.min(o + loadImageStepSize, images.length)), [images.length, loadImageStepSize]));
 
   return (
     <>
-      <FullscreenImage images={images} />
+      <FullscreenImage images={images}>
+        {(e) => (children === undefined ? null : children(e))}
+      </FullscreenImage>
       <div className={classNames('grid grid-cols-1 md:grid-cols-2', className)}>
         {images.slice(0, length)
           .map(([name, metadata]) => (

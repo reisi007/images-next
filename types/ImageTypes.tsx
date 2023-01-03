@@ -15,6 +15,6 @@ const EXIF_TAGS = [
   'ISO',
 ];
 
-type ExifTagsType = typeof EXIF_TAGS[number];
+export type ExifTagsType = typeof EXIF_TAGS[number];
 export type ExifInfo = Record<ExifTagsType, string | undefined>;
 export type JsonExifMetadata = { width: number, height: number, exif: ExifInfo };
