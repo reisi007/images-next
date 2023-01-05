@@ -45,7 +45,7 @@ export function useManualFetch<Body extends ServerError, Error extends ServerErr
 }
 
 export function useSendEmail<T extends EmailSubmittable & ServerError>() {
-  return useManualFetch<T, T>('https://api.reisinger.pictures/email.php');
+  return useManualFetch<T, T>('api/email.php');
 }
 
 export type EmailSubmittable = {
