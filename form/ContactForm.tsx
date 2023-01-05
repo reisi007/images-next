@@ -4,12 +4,12 @@ import * as yup from 'yup';
 import React, { useCallback } from 'react';
 import { EmailSubmittable, useSendEmail } from '../host/Rest';
 import {
-  ExtSubmitHandler, Form, FormChildrenProps, PHONE_REGEXP,
+  ExtSubmitHandler, Form, FormChildrenProps, PHONE_REGEXP, Shape,
 } from './Form';
 import { Styleable } from '../types/Styleable';
-import { Input, Textarea } from './Input';
+import { CheckboxInput, Input, Textarea } from './Input';
 import { ActionButton, SubmitButton } from '../button/ActionButton';
-import { CommonFormFields } from './Url2Form';
+import { CommonFormFields, RequiredFormFields } from './Url2Form';
 
 export function ContactForm({
   className,
@@ -55,6 +55,7 @@ function ContactFormContent({
           <Input label="Handynummer" control={control} errorMessage={errors.tel} {...register('tel')} type="tel" className="md:col-span-2" />
           <Input control={control} label="Betreff" required errorMessage={errors.subject} {...register('subject')} type="text" className="md:col-span-2" />
           <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} required type="tel" className="md:col-span-2" />
+          <CheckboxInput {...register('dsgvo')} label="Ich bin damit einverstanden, dass meine Nachricht übertragen wird." control={control} required className="mt-2 md:col-span-2" />
           <SubmitButton errors={errors} isSubmitting={isSubmitting} disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</SubmitButton>
         </div>
       )}
@@ -70,7 +71,7 @@ function ContactFormContent({
   );
 }
 
-const contractFormResolver = yupResolver(yup.object(
+const contractFormResolver = yupResolver(yup.object<Partial<Shape<ContactFormMessage>>>(
   {
     firstName: yup.string()
       .required('Bitte Vorname eingeben'),
@@ -83,8 +84,12 @@ const contractFormResolver = yupResolver(yup.object(
       .matches(PHONE_REGEXP, 'Bitte eine gültige Telefonnummer eingeben'),
     message: yup.string()
       .required('Bitte gib deine Nachricht an mich ein'),
+    subject: yup.string()
+      .required('Bitte gib einen Betreff ein'),
+    dsgvo: yup.boolean()
+      .required('Deine Zustimmung zum Senden der Daten ist verpflichtend'),
   },
 )
   .required());
 
-export type ContactFormMessage = EmailSubmittable & CommonFormFields;
+export type ContactFormMessage = EmailSubmittable & CommonFormFields & RequiredFormFields;

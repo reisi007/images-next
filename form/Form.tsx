@@ -5,6 +5,7 @@ import { FormEventHandler, ReactNode, useCallback } from 'react';
 import {
   UseFormClearErrors, UseFormRegister, UseFormSetError, UseFormSetValue,
 } from 'react-hook-form/dist/types/form';
+import * as yup from 'yup';
 import { Styleable } from '../types/Styleable';
 
 export function Form<T extends object>({
@@ -52,6 +53,22 @@ export function Form<T extends object>({
     </form>
   );
 }
+
+export type ConditionalSchema<T> = T extends string
+  ? yup.StringSchema
+  : T extends number
+    ? yup.NumberSchema
+    : T extends boolean
+      ? yup.BooleanSchema
+      : T extends Record<any, any>
+        ? yup.AnyObjectSchema
+        : T extends Array<any>
+          ? yup.ArraySchema<any, any>
+          : yup.AnySchema;
+
+export type Shape<Fields> = {
+  [Key in keyof Fields]: ConditionalSchema<Fields[Key]>;
+};
 
 export const PHONE_REGEXP = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 

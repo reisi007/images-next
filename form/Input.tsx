@@ -58,7 +58,7 @@ export function CheckboxInput<T extends object, P extends FieldPath<T> >({
         },
       }) => (
         <div className={classNames(className, 'flex flex-col')}>
-          <Label id={id} label={label} required={props.required}>
+          <Label id={id} className="ml-2" label={label} required={props.required}>
             <input {...props} checked={value} onChange={onChange} type="checkbox" id={id} />
           </Label>
           {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
@@ -133,13 +133,15 @@ function Label({
   label,
   id,
   children,
-}: { required?: boolean, id: string, label: ReactNode, children?:ReactNode }) {
+  className,
+}: { required?: boolean, id: string, label: ReactNode, children?:ReactNode } & Pick<Styleable, 'className'>) {
   return (
     <label className="inline-flex" htmlFor={id}>
       {children}
-      {label}
-      {' '}
-      {required ? <span className="text-error">*</span> : false}
+      <span className={className}>
+        {label}
+        {required ? <span className="text-error">&nbsp;*</span> : false}
+      </span>
     </label>
   );
 }

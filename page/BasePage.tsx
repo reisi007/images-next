@@ -39,7 +39,7 @@ export function BasePage({
         { showContactForm && (
         <>
           <h2>Kontaktere mich</h2>
-          <ContactForm className={classNames(styles.container, 'pt-6')} />
+          <ContactForm className={classNames(styles.container, 'p pt-6')} />
         </>
         )}
         <Footer />

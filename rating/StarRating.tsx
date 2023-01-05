@@ -40,6 +40,8 @@ export function StarRating(
     setStars(clickedStar, isHalfStar);
   }, [editable, setStars]);
 
+  // TODO Replace i with icons
+
   return (
     <span
       className={classNames('text-gold', FONT_ICONS.className, className)}
