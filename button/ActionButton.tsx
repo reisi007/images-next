@@ -15,12 +15,12 @@ export function ActionButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
 
 export function SubmitButton(rawProps:Omit< ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & { isSubmitting:boolean, errors: FieldErrors<{ server:string }> }) {
   const {
-    isSubmitting, errors, children, ...props
+    isSubmitting, errors, children, className, ...props
   } = rawProps;
   const error = errors.server;
 
   return (
-    <ActionButton {...props} type="submit">
+    <ActionButton {...props} className={classNames(className, 'mt-4')} type="submit">
       {!isSubmitting && !error && children}
       {isSubmitting && <LoadingIndicator height="2rem" />}
       {!!error && <span className="text-error">{error.message}</span>}

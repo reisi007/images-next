@@ -18,9 +18,9 @@ export function ContactForm({
   ...initialValue
 }: DeepPartial<ContactFormMessage> & Partial<Styleable> & { moreOnSubmit?: () => void }) {
   const action = useSendEmail<ContactFormMessage>();
-  const submit: ExtSubmitHandler<ContactFormMessage> = useCallback((e, setErrors, clearErrors) => {
+  const submit: ExtSubmitHandler<ContactFormMessage> = useCallback((setErrors, clearErrors, e) => {
     if (moreOnSubmit !== undefined) moreOnSubmit();
-    return action(e, setErrors, clearErrors);
+    return action(setErrors, clearErrors, undefined, e);
   }, [action, moreOnSubmit]);
   return (
     <div className={className} style={style}>
