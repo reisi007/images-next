@@ -5,12 +5,12 @@ import Link from 'next/link';
 import styles from '../utils/Utils.module.css';
 import { ReisishotIcon, ReisishotIcons, ReisishotIconSizes } from '../utils/ReisishotIcons';
 
-export type NavMenuProps = { title: string, menuItems: { [key: string]: PathEntry } };
+export type NavMenuProps = { title: string, menuItems?: { [key: string]: PathEntry } };
 
 export function NavMenu({ title, menuItems }: NavMenuProps) {
   const curPath = useRouter().asPath.substring(1);
-  const allMenuLinks = useMemo(() => Object.entries(menuItems)
-    .filter(([p]) => p !== curPath), [curPath, menuItems]);
+  const allMenuLinks = useMemo(() => (menuItems === undefined ? [] : Object.entries(menuItems)
+    .filter(([p]) => p !== curPath)), [curPath, menuItems]);
 
   const importantLinks = useMemo(() => allMenuLinks.filter(([_, v]) => v.important === true), [allMenuLinks]);
   const restLinks = useMemo(() => allMenuLinks.filter(([_, v]) => v.important !== true), [allMenuLinks]);
