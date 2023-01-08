@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { NavMenu, NavMenuProps } from './NavMenu';
 
 export type HeaderProps = { description?:string, keywords?: Array<string> } & NavMenuProps;
@@ -8,6 +9,7 @@ export function Header({
   title, menuItems, description, keywords,
 }: HeaderProps) {
   const keywordString = keywords?.join(',');
+  const { asPath } = useRouter();
   return (
     <>
       <Head>
@@ -21,6 +23,7 @@ export function Header({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <link rel="canonical" href={`https://reisinger.pictures${asPath}`} />
       </Head>
       <NavMenu title={title} menuItems={menuItems} />
     </>
