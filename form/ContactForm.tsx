@@ -27,7 +27,7 @@ export function ContactForm({
   return (
     <div className={className} style={style}>
       <Form<ContactFormMessage> initialValue={initialValue} onSubmit={submit} resolver={contractFormResolver}>
-        {(formState, register, control, setValue, reset) => <ContactFormContent formState={formState} register={register} control={control} setValue={setValue} reset={reset} />}
+        {(formState, control, setValue, reset) => <ContactFormContent formState={formState} control={control} setValue={setValue} reset={reset} />}
       </Form>
     </div>
   );
@@ -35,7 +35,6 @@ export function ContactForm({
 
 function ContactFormContent({
   formState,
-  register,
   control,
   reset,
 }: FormChildrenProps<ContactFormMessage>) {
@@ -51,13 +50,19 @@ function ContactFormContent({
     <>
       {!isSubmitSuccessful && (
         <div className="grid grid-cols-1 md:grid-cols-2">
-          <Input label="Vorname" control={control} errorMessage={errors.firstName} required className="md:mr-1" {...register('firstName')} />
-          <Input label="Nachname" control={control} errorMessage={errors.lastName} required className="md:ml-1" {...register('lastName')} />
-          <Input label="E-Mail" control={control} errorMessage={errors.email} required {...register('email')} type="email" className="md:col-span-2" />
-          <Input label="Handynummer" control={control} errorMessage={errors.tel} {...register('tel')} type="tel" className="md:col-span-2" />
-          <Input control={control} label="Betreff" required errorMessage={errors.subject} {...register('subject')} type="text" className="md:col-span-2" />
-          <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} {...register('message')} required type="tel" className="md:col-span-2" />
-          <CheckboxInput {...register('dsgvo')} label="Ich bin damit einverstanden, dass meine Nachricht übertragen wird." control={control} required className="mt-2 md:col-span-2" />
+          <Input label="Vorname" control={control} errorMessage={errors.firstName} required className="md:mr-1" name="firstName" />
+          <Input label="Nachname" control={control} errorMessage={errors.lastName} required className="md:ml-1" name="lastName" />
+          <Input label="E-Mail" control={control} errorMessage={errors.email} required name="email" type="email" className="md:col-span-2" />
+          <Input label="Handynummer" control={control} errorMessage={errors.tel} name="tel" type="tel" className="md:col-span-2" />
+          <Input control={control} label="Betreff" required errorMessage={errors.subject} name="subject" type="text" className="md:col-span-2" />
+          <Textarea rows={5} control={control} label="Deine Nachricht an mich" errorMessage={errors.message} name="message" required type="tel" className="md:col-span-2" />
+          <CheckboxInput<ContactFormMessage>
+            errorMessage={errors.dsgvo}
+            name="dsgvo"
+            label="Ich bin damit einverstanden, dass meine Nachricht übertragen wird."
+            control={control}
+            className="mt-2 md:col-span-2"
+          />
           <SubmitButton errors={errors} isSubmitting={isSubmitting} disabled={!isValid || !isDirty || isSubmitting} className="mt-4 bg-primary text-onPrimary md:col-span-2">Absenden</SubmitButton>
         </div>
       )}
@@ -89,7 +94,8 @@ const contractFormResolver = yupResolver(yup.object<Partial<Shape<ContactFormMes
     subject: yup.string()
       .required('Bitte gib einen Betreff ein'),
     dsgvo: yup.boolean()
-      .required('Deine Zustimmung zum Senden der Daten ist verpflichtend'),
+      .required('Deine Zustimmung zum Senden der Daten ist verpflichtend')
+      .isTrue('Deine Zustimmung zum Senden der Daten ist verpflichtend'),
   },
 )
   .required());
