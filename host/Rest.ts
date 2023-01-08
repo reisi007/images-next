@@ -37,7 +37,7 @@ export function useManualFetch<
         },
       },
     )
-      .then((r) => r.json, (reason) => {
+      .then((r) => r.json(), (reason) => {
         setError(server, {
           type: 'server',
           message: JSON.stringify(reason),

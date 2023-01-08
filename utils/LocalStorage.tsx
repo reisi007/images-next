@@ -12,11 +12,11 @@ export function useLocalStorage<T extends object>(key:string) {
     if (data !== null) setState(JSON.parse(data));
   }, [key, localStorage, setState]);
 
-  const publicSet = useCallback((newVal:T | null) => {
+  const publicSet = useCallback((newVal:T | null | undefined) => {
     if (localStorage === undefined) return;
-    if (newVal === null) localStorage.removeItem(key);
+    if (newVal === null || newVal === undefined) localStorage.removeItem(key);
     else localStorage.setItem(key, JSON.stringify(newVal));
-    setState(newVal);
+    setState(newVal ?? null);
   }, [key, localStorage, setState]);
 
   return [state, publicSet] as const;
