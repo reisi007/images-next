@@ -24,7 +24,10 @@ export function Footer() {
           <ReisishotIcon icon={ReisishotIcons.Mail} size={ReisishotIconSizes.LARGE} />
         </a>
       </div>
-      {router.pathname !== '/impressum' && <Link className="block py-2 text-center" href="/impressum">Impressum & Datenschutz</Link>}
+      <div className="flex w-full justify-around">
+        {router.asPath !== '/impressum' && <Link className="block py-2 text-center" href="/impressum">Impressum & Datenschutz</Link>}
+        {!router.asPath.startsWith('/admin') && <Link className="block py-2 text-center" href="/admin">Admin</Link> }
+      </div>
     </>
   );
 }

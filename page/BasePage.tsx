@@ -24,7 +24,7 @@ export function BasePage({
     useCallback((e) => setFabVisible(!e[0].isIntersecting), [setFabVisible]),
     '0px 0px 0px 0px',
   );
-  const [dialog, setDialogVisible, isDialogVisible] = useModal('Kontaktere mich', () => <ContactForm />);
+  const [dialog, setDialogVisible, isDialogVisible] = useModal('Kontaktere mich', () => <ContactForm moreOnSubmit={() => setDialogVisible(false)} />);
   const openDialogAction = useCallback(() => {
     setDialogVisible(true);
   }, [setDialogVisible]);

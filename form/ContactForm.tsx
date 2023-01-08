@@ -18,10 +18,12 @@ export function ContactForm({
   ...initialValue
 }: DeepPartial<ContactFormMessage> & Partial<Styleable> & { moreOnSubmit?: () => void }) {
   const action = useSendEmail<ContactFormMessage>();
-  const submit: ExtSubmitHandler<ContactFormMessage> = useCallback((setErrors, clearErrors, e) => {
-    if (moreOnSubmit !== undefined) moreOnSubmit();
-    return action(setErrors, clearErrors, undefined, e);
-  }, [action, moreOnSubmit]);
+  const submit: ExtSubmitHandler<ContactFormMessage> = useCallback((setErrors, clearErrors, e) => action(
+    setErrors,
+    clearErrors,
+    undefined,
+    e,
+  ).then(moreOnSubmit), [action, moreOnSubmit]);
   return (
     <div className={className} style={style}>
       <Form<ContactFormMessage> initialValue={initialValue} onSubmit={submit} resolver={contractFormResolver}>

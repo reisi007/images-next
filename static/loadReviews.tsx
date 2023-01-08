@@ -6,8 +6,8 @@ import dayjs from 'dayjs';
 import { asyncFlatMap, asyncMap } from '../utils/asyncFlatMap';
 import { TEMPLATE_STRING_AS_DATE } from '../utils/Age';
 import {
-  hasAdvertisedCategory, Review, REVIEW_TYPES, ReviewCategory, ReviewProps,
-} from '../types/ReviewTypes';
+  hasAdvertisedCategory, Testimonial, REVIEW_TYPES, TestiminialCategory, TestimonialProps,
+} from '../types/TestimonialTypes';
 
 const postsDirectory = path.join(process.cwd(), 'private', 'reviews');
 
@@ -32,13 +32,13 @@ async function loadReviews() {
     };
 
     if (typeof data.name !== 'string') throw new Error('Name ist nicht vorhanden');
-    const type = data?.type as (ReviewCategory) | undefined;
+    const type = data?.type as (TestiminialCategory) | undefined;
     if (type !== undefined && !REVIEW_TYPES.includes(type)) throw new Error(`Type ${type} is not included in ${REVIEW_TYPES.join(', ')}`);
 
-    return data as ReviewProps;
+    return data as TestimonialProps;
   }
 
-  return asyncMap(filePaths, async (fullPath: string): Promise<Review> => {
+  return asyncMap(filePaths, async (fullPath: string): Promise<Testimonial> => {
     // Remove ".md" from file name to get id
     const fileName = path.basename(fullPath);
     const id = fileName.replace(/\.review.md$/, '');
@@ -61,14 +61,14 @@ async function loadReviews() {
   });
 }
 
-export async function getAllReviews(): Promise<Array<Review>> {
+export async function getAllReviews(): Promise<Array<Testimonial>> {
   const allReviewa = await loadReviews();
   // Sort posts by date
   return allReviewa.sort((a, b) => {
     const aMatter = a.frontmatter;
     const bMatter = b.frontmatter;
 
-    function hasMedia(props: ReviewProps): boolean {
+    function hasMedia(props: TestimonialProps): boolean {
       return props.image !== undefined;
     }
 

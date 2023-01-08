@@ -18,13 +18,8 @@ export function useManualFetch<
   method: 'post' | 'put' | 'delete' = 'post',
   defaultHeaders: HeadersInit = {},
 ): ManualRequest<FormErrors, Response, Header, Body> {
-  return useCallback((setError: UseFormSetError<FormErrors>, clearErrors: UseFormClearErrors<FormErrors>, reuqestHeader?: Header, body?: Body) => {
-    let url: string;
-    if (internalUrl.startsWith('http')) {
-      url = internalUrl;
-    } else {
-      url = `${ROOT_URL}/${internalUrl}`;
-    }
+  return useCallback((setError: UseFormSetError<FormErrors>, clearErrors: UseFormClearErrors<FormErrors>, requestHeader?: Header, body?: Body) => {
+    const url = `${ROOT_URL}/${internalUrl}`;
 
     // @ts-ignore Server is a valid field path for body...
     const server: FieldPath<FormErrors> = 'server';
@@ -38,15 +33,16 @@ export function useManualFetch<
         headers: {
           'Content-Type': 'application/json',
           ...defaultHeaders,
-          ...reuqestHeader,
+          ...requestHeader,
         },
       },
     )
-      .then((r) => r.json(), (reason) => {
+      .then((r) => r.json, (reason) => {
         setError(server, {
           type: 'server',
           message: JSON.stringify(reason),
         });
+        return reason;
       });
   }, [defaultHeaders, internalUrl, method]);
 }
@@ -60,3 +56,12 @@ export type EmailSubmittable = {
   subject: string
   message: string
 };
+
+export function useCreateHeader(user: string, uuid: string): RequestInit {
+  return {
+    headers: {
+      Email: user,
+      AccessKey: uuid,
+    },
+  };
+}
