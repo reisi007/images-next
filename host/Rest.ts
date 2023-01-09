@@ -56,12 +56,3 @@ export type EmailSubmittable = {
   subject: string
   message: string
 };
-
-export function useCreateHeader(user: string, uuid: string): RequestInit {
-  return {
-    headers: {
-      Email: user,
-      AccessKey: uuid,
-    },
-  };
-}
