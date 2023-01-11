@@ -31,34 +31,40 @@ export function Image({
   const filename = useLink(`${baseFilename}`)
     .replaceAll('\\', '/');
 
-  const nextImage = useMemo(() => {
-    let start = filename.lastIndexOf('/');
-    if (start < 0) start = filename.lastIndexOf('\\');
-    const realFilename = start > 0 ? filename.substring(start) : filename;
-    const realFolderName = start > 0 ? `/${filename.substring(0, start + 1)}` : '';
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        alt={alt ?? realFilename.substring(1)}
-        sizes={buildSizeString(breakpoints)}
-        srcSet={computeSrcSet(realFolderName, realFilename)}
-        decoding="async"
-        className={classNames('absolute inset-0 bg-center h-full w-full bg-cover object-contain backdrop-blur-2xl', className)}
-        loading="lazy"
-        style={{ backgroundImage: `url(${computeFileName(realFolderName, realFilename, IMAGE_SIZES[0])})` }}
-      />
-    );
-  }, [alt, breakpoints, className, filename]);
+  let start = filename.lastIndexOf('/');
+  if (start < 0) start = filename.lastIndexOf('\\');
+  const realFilename = start > 0 ? filename.substring(start) : filename;
+  const realFolderName = start > 0 ? `/${filename.substring(0, start + 1)}` : '';
 
   const paddingTop = useImagePadding(heightConstraint, size);
   return (
     <div
-      style={{ paddingTop }}
+      style={{ paddingTop, backgroundImage: `url(${computeFileName(realFolderName, realFilename, IMAGE_SIZES[0])})` }}
       onClick={onClick}
-      className={classNames('relative overflow-hidden', className)}
+      className={classNames('relative overflow-hidden bg-cover bg-center', className)}
     >
-      {nextImage}
+      <HtmlImg realFilename={realFilename} realFolderName={realFolderName} className={className} alt={alt} breakpoints={breakpoints} />
     </div>
+  );
+}
+
+function HtmlImg({
+  realFilename,
+  realFolderName,
+  alt,
+  breakpoints,
+  className,
+}: { realFilename: string, realFolderName:string, alt?: string, breakpoints?: ImageBreakpoints, className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      alt={alt ?? realFilename.substring(1)}
+      sizes={buildSizeString(breakpoints)}
+      srcSet={computeSrcSet(realFolderName, realFilename)}
+      decoding="async"
+      className={classNames('absolute inset-0 bg-center h-full w-full object-contain backdrop-blur-2xl', className)}
+      loading="lazy"
+    />
   );
 }
 
@@ -81,7 +87,7 @@ function computeSrcSet(realFolderName: string, realFilename: string) {
 }
 
 function computeFileName(realFolderName: string, realFilename: string, size: number) {
-  return `/images${realFolderName}/nextImageExportOptimizer${realFilename}-opt-${size}.WEBP`;
+  return `/images${realFolderName}${realFilename}-opt-${size}.WEBP`;
 }
 
 export type ImageBreakpoints = Record<Breakpoint, number>;

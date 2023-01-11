@@ -24,7 +24,7 @@ export function BasePage({
     useCallback((e) => setFabVisible(!e[0].isIntersecting), [setFabVisible]),
     '0px 0px 0px 0px',
   );
-  const [dialog, setDialogVisible, isDialogVisible] = useModal('Kontaktere mich', () => <ContactForm moreOnSubmit={() => setDialogVisible(false)} />);
+  const [dialog, setDialogVisible] = useModal('Kontaktiere mich', (setVisible) => (<ContactForm moreOnSubmit={() => setVisible(false)} />));
   const openDialogAction = useCallback(() => {
     setDialogVisible(true);
   }, [setDialogVisible]);
@@ -45,7 +45,7 @@ export function BasePage({
         <Footer />
       </footer>
       {dialog}
-      { showContactForm && isFabVisible && !isDialogVisible && (
+      { showContactForm && isFabVisible && (
         <FloatingActionButton onClick={openDialogAction} className="group inline-flex items-center justify-center bg-primary-accent/80 text-onPrimary-accent hover:bg-primary-accent">
           <ReisishotIcon size={ReisishotIconSizes.LARGE} className="!text-onPrimary group-hover:mr-2" icon={ReisishotIcons.Mail} />
           <span className="hidden duration-500 ease-in-out group-hover:inline-block">Kontaktiere mich</span>

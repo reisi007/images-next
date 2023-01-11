@@ -63,7 +63,7 @@ export function CheckboxInput<T extends object, P extends FieldPath<T>= FieldPat
       }) => (
         <div className={classNames(className, 'flex flex-col')}>
           <Label id={id} className="ml-2" label={label} required={props.required}>
-            <input {...props} ref={ref} checked={value} onChange={onChange} type="checkbox" id={id} />
+            <input {...props} ref={ref} value={value} onChange={onChange} type="checkbox" id={id} />
           </Label>
           {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
         </div>
