@@ -5,7 +5,7 @@ import {
 } from '../types/ImageTypes';
 import { asyncMap } from '../utils/asyncFlatMap';
 
-export const DIRECTORY_IMAGE = path.join(process.cwd(), 'public', 'images');
+export const DIRECTORY_IMAGE = path.join(process.cwd(), 'private', 'images');
 
 export async function readExifJsonInternal(filename: string, metadataFolder: string = DIRECTORY_IMAGE): Promise<JsonExifMetadata> {
   return JSON.parse(await fs.readFile(path.join(metadataFolder, `${path.basename(filename)}.exif.json`), 'utf8'));
