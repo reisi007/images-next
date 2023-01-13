@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export function useLocalStorage<T extends object>(key:string) {
+export function useLocalStorage<T extends object>(key: string) {
   const memoryState = useState<T | null>(null);
   const [state, setState] = memoryState;
 
@@ -12,11 +12,15 @@ export function useLocalStorage<T extends object>(key:string) {
     if (data !== null) setState(JSON.parse(data));
   }, [key, localStorage, setState]);
 
-  const publicSet = useCallback((newVal:T | null | undefined) => {
+  const publicSet = useCallback((newVal: T | null | undefined) => {
     if (localStorage === undefined) return;
-    if (newVal === null || newVal === undefined) localStorage.removeItem(key);
-    else localStorage.setItem(key, JSON.stringify(newVal));
-    setState(newVal ?? null);
+    const val = newVal ?? null;
+    if (newVal === null) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(newVal));
+    }
+    setState(val);
   }, [key, localStorage, setState]);
 
   return [state, publicSet] as const;

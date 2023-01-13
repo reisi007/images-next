@@ -3,7 +3,7 @@ import {
 } from 'react-hook-form';
 import { FormEventHandler, ReactNode, useCallback } from 'react';
 import {
-  UseFormClearErrors, UseFormSetError, UseFormSetValue,
+  UseFormClearErrors, UseFormGetValues, UseFormSetError, UseFormSetValue,
 } from 'react-hook-form/dist/types/form';
 import * as yup from 'yup';
 import { Styleable } from '../types/Styleable';
@@ -24,6 +24,7 @@ export function Form<T extends object>({
     setValue,
     setError,
     clearErrors,
+    getValues,
   } = useForm<T>({
     defaultValues: initialValue,
     resolver,
@@ -48,7 +49,7 @@ export function Form<T extends object>({
   }, [handleSubmit, submitHandler]);
   return (
     <form className={className} style={style} onReset={onReset} onSubmit={formEventHandler}>
-      {children(formState, control, setValue, reset)}
+      {children(formState, control, getValues, setValue, reset)}
     </form>
   );
 }
@@ -76,12 +77,16 @@ type FormConfig<T extends object> = {
   initialValue?: DeepPartial<T>
   onSubmit: ExtSubmitHandler<T>,
   resolver: Resolver<T>,
-  children: (state: FormState<T>, control: Control<T>, setValue: UseFormSetValue<T>, reset: () => void) => ReactNode,
+  children: (state: FormState<T>, control: Control<T>, getValue: UseFormGetValues<T>, setValue: UseFormSetValue<T>, reset: () => void) => ReactNode,
 };
 
 export type FormChildrenProps<T extends object> = {
   formState: FormState<T>,
   control: Control<T>,
+
+  getValue: UseFormGetValues<T>,
   setValue: UseFormSetValue<T>,
   reset: () => void
 };
+
+export type MinimalFormChildrenProps<T extends object> = Pick<FormChildrenProps<T>, 'formState' | 'control'>;

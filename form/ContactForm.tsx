@@ -31,7 +31,7 @@ export function ContactForm({
   return (
     <div className={className} style={style}>
       <Form<ContactFormMessage> initialValue={initialValue} onSubmit={submit} resolver={contractFormResolver}>
-        {(formState, control, setValue, reset) => <ContactFormContent formState={formState} control={control} setValue={setValue} reset={reset} />}
+        {(formState, control, getValue, setValue, reset) => <ContactFormContent formState={formState} control={control} getValue={getValue} setValue={setValue} reset={reset} />}
       </Form>
     </div>
   );

@@ -1,4 +1,6 @@
-import { HTMLProps, ReactNode, useId } from 'react';
+import {
+  ChangeEventHandler, HTMLProps, ReactNode, useId,
+} from 'react';
 import {
   Control, Controller, FieldError, FieldPath, FieldPathValue,
 } from 'react-hook-form';
@@ -78,6 +80,7 @@ export function Textarea<T extends object, P extends FieldPath<T>>({
   name: fieldName,
   control,
   className,
+  onChange,
   ...props
 }: Omit<HTMLProps<HTMLTextAreaElement>, 'name' | 'ref'> & { name: P } & FieldProperties<T, P>) {
   const id = useId();
@@ -89,16 +92,28 @@ export function Textarea<T extends object, P extends FieldPath<T>>({
       render={({
         field: {
           value,
-          onChange,
+          onChange: formOnChange,
           ref,
         },
-      }) => (
-        <div className={classNames(className, 'flex flex-col')}>
-          <Label id={id} label={label} required={props.required} />
-          <textarea {...props} ref={ref} id={id} value={value ?? ''} onChange={onChange} />
-          {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
-        </div>
-      )}
+      }) => {
+        const onChange1 : ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+          if (onChange !== undefined) onChange(e);
+          formOnChange(e);
+        };
+        return (
+          <div className={classNames(className, 'flex flex-col')}>
+            <Label id={id} label={label} required={props.required} />
+            <textarea
+              {...props}
+              ref={ref}
+              id={id}
+              value={value ?? ''}
+              onChange={onChange1}
+            />
+            {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
+          </div>
+        );
+      }}
     />
   );
 }
