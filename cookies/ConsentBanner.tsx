@@ -11,6 +11,8 @@ export function ConsentBanner() {
     if (hasConsent === null) return;
     if (hasConsent) {
       push(['setCookieConsentGiven']);
+    } else {
+      push(['forgetCookieConsentGiven']);
     }
   }, [hasConsent]);
 
