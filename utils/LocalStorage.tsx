@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export function useLocalStorage<T extends object>(key: string) {
+export function useLocalStorage<T>(key: string) {
   const memoryState = useState<T | null>(null);
   const [state, setState] = memoryState;
 
