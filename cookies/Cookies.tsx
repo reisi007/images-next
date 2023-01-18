@@ -16,7 +16,7 @@ export function CookieConsentContext({ children }: { children: ReactNode }) {
   const setValue = useCallback((v?: boolean | null) => {
     rawSetValue(v === null || v === undefined ? null : v.toString());
   }, [rawSetValue]);
-  const value = useMemo(() => (rawValue === null ? null : rawValue === 'true'), [rawValue]);
+  const value = useMemo(() => (rawValue === null ? null : rawValue === 'true' || rawValue === '"true"'), [rawValue]);
   return (
     <baseContext.Provider value={useMemo(() => [value, setValue], [value, setValue])}>
       {children}
