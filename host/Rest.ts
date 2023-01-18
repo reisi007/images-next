@@ -8,16 +8,14 @@ export type ServerError = { server?: string };
 export type ManualRequest<Errors extends ServerError, Response extends unknown, Header extends Record<string, string> | undefined, Body extends object> =
   (setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>, header?: Header, body?: Body) => Promise<Response>;
 
-export function useManualFetch<
-  FormErrors extends ServerError,
-  Response extends unknown = unknown,
-  Header extends Record<string, string> | undefined = undefined,
-  Body extends ServerError = FormErrors,
->(
+export type ManualStringRequest<Errors extends ServerError, Header extends Record<string, string> | undefined, Body extends object> =
+  (setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>, header?: Header, body?: Body) => Promise<string>;
+
+export function useManualFetchString<FormErrors extends ServerError, Header extends Record<string, string> | undefined = undefined, Body extends object = object>(
   internalUrl: string,
   method: 'post' | 'put' | 'delete' = 'post',
   defaultHeaders: HeadersInit = {},
-): ManualRequest<FormErrors, Response, Header, Body> {
+): ManualStringRequest<FormErrors, Header, Body> {
   return useCallback((setError: UseFormSetError<FormErrors>, clearErrors: UseFormClearErrors<FormErrors>, requestHeader?: Header, body?: Body) => {
     const url = `${ROOT_URL}/${internalUrl}`;
 
@@ -40,7 +38,7 @@ export function useManualFetch<
       .then(async (r) => {
         if (r.ok) {
           if (r.status === 204) return Promise.resolve();
-          return r.json();
+          return r.text();
         }
 
         const text = stripHtml(await r.text());
@@ -61,6 +59,27 @@ export function useManualFetch<
   }, [defaultHeaders, internalUrl, method]);
 }
 
+export function useManualFetch<
+  FormErrors extends ServerError,
+  Response extends unknown = unknown,
+  Header extends Record<string, string> | undefined = undefined,
+  Body extends ServerError = FormErrors,
+>(
+  internalUrl: string,
+  method: 'post' | 'put' | 'delete' = 'post',
+  defaultHeaders: HeadersInit = {},
+): ManualRequest<FormErrors, Response, Header, Body> {
+  const action = useManualFetchString<FormErrors, Header, Body>(internalUrl, method, defaultHeaders);
+  return useCallback((setErrors, clearError, header, body) => action(setErrors, clearError, header, body)
+    .then((e) => {
+      try {
+        return JSON.parse(e);
+      } catch (ex) {
+        return e;
+      }
+    }), [action]);
+}
+
 export function useSendEmail<T extends EmailSubmittable & ServerError>() {
   return useManualFetch<T, unknown, undefined, T>('api/email.php');
 }
@@ -71,7 +90,7 @@ export type EmailSubmittable = {
   message: string
 };
 
-export function stripHtml(html:string) {
+export function stripHtml(html: string) {
   const tmp = document.createElement('DIV');
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || '';
