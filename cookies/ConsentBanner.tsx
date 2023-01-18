@@ -1,20 +1,9 @@
-import { useEffect } from 'react';
-import { push } from '@socialgouv/matomo-next';
 import { useCookieConsentContext } from './Cookies';
 import Markdown from './CookieBannerText.mdx';
 import { ActionButton } from '../button/ActionButton';
 
 export function ConsentBanner() {
   const [hasConsent, setConsent] = useCookieConsentContext();
-
-  useEffect(() => {
-    if (hasConsent === null) return;
-    if (hasConsent) {
-      push(['setCookieConsentGiven']);
-    } else {
-      push(['forgetCookieConsentGiven']);
-    }
-  }, [hasConsent]);
 
   return (
     <>
