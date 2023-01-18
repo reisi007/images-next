@@ -1,7 +1,7 @@
 import React, {
   createContext, ReactNode, useCallback, useContext, useMemo,
 } from 'react';
-import { useLocalStorage } from '../utils/LocalStorage';
+import { useLocalStorageString } from '../utils/LocalStorage';
 
 function setNotPossible() {
   console.error('Setting the cookie was called, but no provider found....');
@@ -12,7 +12,7 @@ const baseContext = createContext<CookieConsentContextType>([false, setNotPossib
 baseContext.displayName = 'Cookie Consent Context';
 
 export function CookieConsentContext({ children }: { children: ReactNode }) {
-  const [rawValue, rawSetValue] = useLocalStorage<string | null>('cookieConsent');
+  const [rawValue, rawSetValue] = useLocalStorageString('cookieConsent');
   const setValue = useCallback((v?: boolean | null) => {
     rawSetValue(v === null || v === undefined ? null : v.toString());
   }, [rawSetValue]);
