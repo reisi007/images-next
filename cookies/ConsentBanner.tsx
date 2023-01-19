@@ -7,7 +7,7 @@ export function ConsentBanner() {
 
   return (
     <>
-      {hasConsent === null && (
+      {typeof window !== 'undefined' && hasConsent === null && (
         <div className="fixed inset-x-0 bottom-0 z-50 bg-white p-4 shadow-2xl">
           <Markdown />
           <div className="flex justify-evenly">
