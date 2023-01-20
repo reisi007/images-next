@@ -6,17 +6,17 @@ export const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL;
 
 export type ServerError = { server?: string };
 export type ManualRequest<Errors extends ServerError, Response extends unknown, Header extends Record<string, string> | undefined, Body extends object> =
-  (setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>, header?: Header, body?: Body) => Promise<Response>;
+  (setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>, header?: Header, body?: Body, signal?: AbortSignal) => Promise<Response>;
 
 export type ManualStringRequest<Errors extends ServerError, Header extends Record<string, string> | undefined, Body extends object> =
-  (setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>, header?: Header, body?: Body) => Promise<string>;
+  (setErrors: UseFormSetError<Errors>, clearError: UseFormClearErrors<Errors>, header?: Header, body?: Body, signal?: AbortSignal) => Promise<string>;
 
 export function useManualFetchString<FormErrors extends ServerError, Header extends Record<string, string> | undefined = undefined, Body extends object = object>(
   internalUrl: string,
   method: 'post' | 'put' | 'delete' = 'post',
   defaultHeaders: HeadersInit = {},
 ): ManualStringRequest<FormErrors, Header, Body> {
-  return useCallback((setError: UseFormSetError<FormErrors>, clearErrors: UseFormClearErrors<FormErrors>, requestHeader?: Header, body?: Body) => {
+  return useCallback((setError: UseFormSetError<FormErrors>, clearErrors: UseFormClearErrors<FormErrors>, requestHeader?: Header, body?: Body, signal?: AbortSignal) => {
     const url = `${ROOT_URL}/${internalUrl}`;
 
     // @ts-ignore Server is a valid field path for body...
@@ -33,6 +33,7 @@ export function useManualFetchString<FormErrors extends ServerError, Header exte
           ...defaultHeaders,
           ...requestHeader,
         },
+        signal,
       },
     )
       .then(async (r) => {
@@ -70,7 +71,7 @@ export function useManualFetch<
   defaultHeaders: HeadersInit = {},
 ): ManualRequest<FormErrors, Response, Header, Body> {
   const action = useManualFetchString<FormErrors, Header, Body>(internalUrl, method, defaultHeaders);
-  return useCallback((setErrors, clearError, header, body) => action(setErrors, clearError, header, body)
+  return useCallback((setErrors, clearError, header, body, signal) => action(setErrors, clearError, header, body, signal)
     .then((e) => {
       try {
         return JSON.parse(e);

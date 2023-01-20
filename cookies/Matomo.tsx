@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { init, push } from '@socialgouv/matomo-next';
 import { useCookieConsentContext } from './Cookies';
+import { useOnce } from '../utils/CustomEffects';
 
 export function Matomo({
   url = 'https://analytics.reisinger.pictures/',
@@ -8,13 +9,13 @@ export function Matomo({
 }: { url?: string, siteId: `${number}` }) {
   const [hasConsent] = useCookieConsentContext();
 
-  useEffect(() => {
+  useOnce(() => {
     init({
       url,
       siteId,
     });
     push(['requireCookieConsent']);
-  }, [siteId, url]);
+  });
 
   useEffect(() => {
     if (hasConsent === null) return;

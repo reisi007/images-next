@@ -72,7 +72,7 @@ export type Shape<Fields> = {
 
 export const PHONE_REGEXP = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
-export type ExtSubmitHandler<T extends object> = (setErrors: UseFormSetError<T>, clearErrors: UseFormClearErrors<T>, data: T, event?: React.BaseSyntheticEvent) => unknown;
+export type ExtSubmitHandler<T extends object> = (setErrors: UseFormSetError<T>, clearErrors: UseFormClearErrors<T>, data: T, event?: React.BaseSyntheticEvent, signal?: AbortSignal) => unknown;
 type FormConfig<T extends object> = {
   initialValue?: DeepPartial<T>
   onSubmit: ExtSubmitHandler<T>,
