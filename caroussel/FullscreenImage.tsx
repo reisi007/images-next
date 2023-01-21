@@ -1,10 +1,13 @@
 import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useMemo } from 'react';
+import {
+  ReactNode, useCallback, useEffect, useMemo,
+} from 'react';
 import { ImageInfo } from '../types/ImageTypes';
 import { Image } from '../utils/Image';
 import { ensureString } from '../form/Url2Form';
 import { NextButton, PrevButton } from './AbstractCaroussel';
 import styles from './FullscreenImage.module.css';
+import { useSendMatomoEvent } from '../matomo/Matomo';
 
 export function FullscreenImage({
   images,
@@ -34,6 +37,7 @@ function DisplayFullscreen({
     push,
     pathname,
   } = useRouter();
+  const sendEvent = useSendMatomoEvent<'gallery'>();
 
   const setFileNameQuery = useCallback((idx: number) => {
     const image1 = images[idx];
@@ -57,12 +61,17 @@ function DisplayFullscreen({
       fileName: undefined,
     },
   }), [pathname, push, query]);
+
+  useEffect(() => {
+    sendEvent('gallery', 'imageView', curFilename);
+  }, [curFilename, sendEvent]);
+
   return (
     <div className="fixed inset-0 z-50 h-full w-full bg-black">
       <Image filename={curFilename} alt={curInfo.metadata.title} heightConstraint="100vh" />
 
-      {imageIdx < images.length - 1 && <PrevButton onClick={higherIndex} />}
-      {imageIdx > 0 && <NextButton onClick={lowerIndex} />}
+      {imageIdx < images.length - 1 && <PrevButton onClick={lowerIndex} />}
+      {imageIdx > 0 && <NextButton onClick={higherIndex} />}
       <div className="absolute top-0 right-0 z-50 rounded-bl bg-white/20 px-4 pb-2 pt-3">
         <div className="inline-flex space-x-4">
           {savedChildren()}

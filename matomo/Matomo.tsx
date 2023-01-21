@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { init, push } from '@socialgouv/matomo-next';
 import { useCookieConsentContext } from './Cookies';
 import { useOnce } from '../utils/CustomEffects';
@@ -27,4 +27,23 @@ export function Matomo({
   }, [hasConsent]);
 
   return <>{false}</>;
+}
+
+type Category = 'gallery' | 'beforeAfter';
+type CategoryType<C extends Category> =
+  C extends 'gallery' ? 'imageView' :
+    (C extends 'beforeAfter' ? 'slide' :
+      never
+    );
+
+type UseSendEvent<C extends Category> = (
+  category: C,
+  type: CategoryType<C>,
+  data: string,
+) => void;
+
+export function useSendMatomoEvent<C extends Category = Category>(): UseSendEvent<C> {
+  return useCallback((category, type, data) => {
+    push(['trackEvent', category, `${category}_${type}`, data]);
+  }, []);
 }

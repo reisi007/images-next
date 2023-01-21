@@ -1,12 +1,22 @@
 import classNames from 'classnames';
 import {
-  CSSProperties, MouseEventHandler, TouchEventHandler, useCallback, useState,
+  CSSProperties, Dispatch, MouseEventHandler, SetStateAction, TouchEventHandler, useCallback, useEffect, useState,
 } from 'react';
 import { ImageInfo, ImageSize } from '../types/ImageTypes';
 import {
   Breakpoint, Image, ImageBreakpoints, SORT_NEWEST_TO_OLDEST, useImagePadding,
 } from '../utils/Image';
 import { Styleable } from '../types/Styleable';
+import { useSendMatomoEvent } from '../matomo/Matomo';
+
+type BeforeAfterImageProps = {
+  data: ImageInfo,
+  name: string,
+  size: ImageSize,
+  breakpoints: ImageBreakpoints,
+  heightConstraint?: string,
+  onChange?: () => void
+} & Partial<Styleable>;
 
 export function BeforeAfterImage({
   className,
@@ -15,8 +25,9 @@ export function BeforeAfterImage({
   name,
   breakpoints,
   size,
+  onChange,
   heightConstraint = '80vh',
-}: { data: ImageInfo, name: string, size: ImageSize, breakpoints: ImageBreakpoints, heightConstraint?: string } & Partial<Styleable>) {
+}: BeforeAfterImageProps) {
   const paddingTop = useImagePadding(heightConstraint, data.size);
   const [widthPercentage, setWidthPercentage] = useState(50);
   const beforeWidth = `${(100 / widthPercentage) * 100}%`;
@@ -25,13 +36,15 @@ export function BeforeAfterImage({
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     setWidthPercentage((x * 100) / e.currentTarget.offsetWidth);
-  }, []);
+    if (onChange !== undefined) onChange();
+  }, [onChange]);
 
   const onTouch: TouchEventHandler<HTMLDivElement> = useCallback((e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.changedTouches[0].clientX - rect.left;
     setWidthPercentage((x * 100) / e.currentTarget.offsetWidth);
-  }, []);
+    if (onChange !== undefined) onChange();
+  }, [onChange]);
 
   const myStyle: CSSProperties = style ?? { paddingTop };
   return (
@@ -82,11 +95,22 @@ const BEFORE_AFTER_BREAKPOINTS: ImageBreakpoints = {
 
 export function MultipleBeforeAfterImages<T extends string>({ data }: { data: Record<T, ImageInfo> }) {
   const entries: Array<[string, ImageInfo]> = Object.entries(data);
+  const [lastChangedImage, setLastChangedImage] = useState<string | null>(null);
+  const sendEvent = useSendMatomoEvent<'beforeAfter'>();
+
+  useEffect(() => {
+    if (lastChangedImage !== null) sendEvent('beforeAfter', 'slide', lastChangedImage);
+  }, [lastChangedImage, sendEvent]);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
       {entries
         .sort(SORT_NEWEST_TO_OLDEST) // Sort from newest to oldest
-        .map(([name, info]) => <BeforeAfterImage className="h-full" size={info.size} key={name} name={name} breakpoints={BEFORE_AFTER_BREAKPOINTS} data={info} />)}
+        .map(([name, info]) => <SingleBeforeAfterImages key={name} name={name} info={info} setLastChangedImage={setLastChangedImage} />)}
     </div>
   );
+}
+
+function SingleBeforeAfterImages({ name, info, setLastChangedImage }:{ name:string, info:ImageInfo, setLastChangedImage: Dispatch<SetStateAction<string | null>> }) {
+  return <BeforeAfterImage className="h-full" size={info.size} onChange={() => { setLastChangedImage(name); }} name={name} breakpoints={BEFORE_AFTER_BREAKPOINTS} data={info} />;
 }
