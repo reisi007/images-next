@@ -3,7 +3,7 @@ import { init, push } from '@socialgouv/matomo-next';
 import { useCookieConsentContext } from './Cookies';
 
 export function Matomo({
-  url = 'https://analytics.reisinger.pictures/',
+  url = 'https://analytics.reisinger.pictures',
   siteId,
 }: { url?: string, siteId: `${number}` }) {
   const [hasConsent] = useCookieConsentContext();
