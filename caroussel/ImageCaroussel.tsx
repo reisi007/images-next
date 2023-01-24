@@ -10,7 +10,7 @@ export function ImageCaroussel<T extends string>({
   intervalMs = 7500,
   className,
   style,
-  heightConstraint = '80vw',
+  heightConstraint = '80vh',
 }: { intervalMs?: number, metadataMap: MetadataMap<T>, heightConstraint? :string } & Partial<Styleable>) {
   const classes = classNames(className, 'rounded-lg');
   const items = useMemo(() => Object.keys(metadataMap) as Array<T>, [metadataMap]);

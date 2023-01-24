@@ -53,7 +53,7 @@ export function BeforeAfterImage({
       onClick={onClick}
       onMouseMove={onClick}
       onTouchMove={onTouch}
-      className={classNames('group relative cursor-grab overflow-hidden left-1/2 -translate-x-1/2', className)}
+      className={classNames('group contain-strict relative cursor-grab overflow-hidden left-1/2 -translate-x-1/2', className)}
     >
       <div className="absolute inset-0 block w-full overflow-hidden">
         <div className={classNames(className, 'w-full h-full')}>
@@ -70,14 +70,15 @@ export function BeforeAfterImage({
           'before:block before:fixed before:inset-y-0 before:-top-10 before:w-0.5 before:bg-white before:h-1/2 before:ml-4',
           'after:block after:fixed after:bottom-0 after:w-0.5 after:bg-white after:h-1/2 after:ml-4',
           'z-20 absolute top-1/2 text-center align-middle -ml-9 -mt-10 h-10 w-10 pointer-events-none text-white rounded-full',
-          'shadow bg-transparent border-2',
+          'shadow bg-transparent border-2 focus:ring-0',
         )}
         style={{ left: `calc(${widthPercentage}% + 1rem)` }}
       >
         <span
-          className="mt-[-0.1875rem] inline-flex h-10 items-center text-lg tracking-[0.25rem]"
+          className="inline-flex h-10 items-center justify-evenly pb-1 text-lg"
         >
-          ◂▸
+          <span>◂</span>
+          <span>▸</span>
         </span>
       </div>
     </div>

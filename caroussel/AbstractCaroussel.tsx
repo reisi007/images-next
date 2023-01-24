@@ -79,7 +79,7 @@ export function PrevButton({ onClick }:{ onClick: () => void }) {
     <button
       onClick={onClick}
       type="button"
-      className="absolute top-0 left-0 z-30 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
+      className="absolute top-0 left-0 z-30 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none focus:ring-0"
     >
       <span className={classNames('group', styles.prevNextButton)}>
         <svg aria-hidden="true" className="h-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -101,7 +101,7 @@ export function NextButton({ onClick }:{ onClick: () => void }) {
     <button
       onClick={onClick}
       type="button"
-      className="absolute top-0 right-0 z-30 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
+      className="absolute top-0 right-0 z-30 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none focus:ring-0"
     >
       <span className={classNames('group', styles.prevNextButton)}>
         <svg aria-hidden="true" className="h-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

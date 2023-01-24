@@ -70,8 +70,8 @@ function DisplayFullscreen({
     <div className="fixed inset-0 z-50 h-full w-full bg-black">
       <Image filename={curFilename} alt={curInfo.metadata.title} heightConstraint="100vh" />
 
-      {imageIdx < images.length - 1 && <PrevButton onClick={lowerIndex} />}
-      {imageIdx > 0 && <NextButton onClick={higherIndex} />}
+      {imageIdx < images.length - 1 && <NextButton onClick={higherIndex} />}
+      {imageIdx > 0 && <PrevButton onClick={lowerIndex} />}
       <div className="absolute top-0 right-0 z-50 rounded-bl bg-white/20 px-4 pb-2 pt-3">
         <div className="inline-flex space-x-4">
           {savedChildren()}

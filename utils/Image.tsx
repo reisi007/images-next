@@ -41,7 +41,7 @@ export function Image({
     <div
       style={{ paddingTop, backgroundImage: `url(${computeFileName(realFolderName, realFilename, IMAGE_SIZES[0])})` }}
       onClick={onClick}
-      className={classNames('relative overflow-hidden bg-cover bg-center', className)}
+      className={classNames('relative contain-strict overflow-hidden bg-cover bg-center', className)}
     >
       <HtmlImg realFilename={realFilename} realFolderName={realFolderName} className={className} alt={alt} breakpoints={breakpoints} />
     </div>
