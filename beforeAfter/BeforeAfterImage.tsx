@@ -53,7 +53,7 @@ export function BeforeAfterImage({
       onClick={onClick}
       onMouseMove={onClick}
       onTouchMove={onTouch}
-      className={classNames('group contain-strict relative cursor-grab overflow-hidden left-1/2 -translate-x-1/2', className)}
+      className={classNames('group relative cursor-grab overflow-hidden left-1/2 -translate-x-1/2', className)}
     >
       <div className="absolute inset-0 block w-full overflow-hidden">
         <div className={classNames(className, 'w-full h-full')}>

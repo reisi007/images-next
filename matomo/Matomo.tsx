@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { init, push } from '@socialgouv/matomo-next';
 import { useCookieConsentContext } from './Cookies';
-import { useOnce } from '../utils/CustomEffects';
 
 export function Matomo({
   url = 'https://analytics.reisinger.pictures/',
@@ -9,13 +8,14 @@ export function Matomo({
 }: { url?: string, siteId: `${number}` }) {
   const [hasConsent] = useCookieConsentContext();
 
-  useOnce(() => {
+  useEffect(() => {
     init({
       url,
       siteId,
     });
+
     push(['requireCookieConsent']);
-  });
+  }, [siteId, url]);
 
   useEffect(() => {
     if (hasConsent === null) return;
@@ -44,6 +44,7 @@ type UseSendEvent<C extends Category> = (
 
 export function useSendMatomoEvent<C extends Category = Category>(): UseSendEvent<C> {
   return useCallback((category, type, data) => {
-    push(['trackEvent', category, `${category}_${type}`, data]);
+    const args = ['trackEvent', category, `${category}_${type}`, data];
+    push(args);
   }, []);
 }

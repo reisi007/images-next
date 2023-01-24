@@ -60,7 +60,7 @@ export function AbstractCaroussel<I extends string | { id: string | number }>(
           <div
             key={key}
             className={classNames(
-              'motion-reduce:transition-none transition-all duration-1000 delay-300 ease-in-out absolute top-1/2 left-1/2 block w-full -translate-x-1/2 -translate-y-1/2',
+              'absolute top-1/2 left-1/2 block w-full -translate-x-1/2 -translate-y-1/2',
               { hidden: idx === 1 && itemsToDisplay.length !== 1 },
             )}
           >
