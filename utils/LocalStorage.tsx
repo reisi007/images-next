@@ -2,29 +2,32 @@ import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
-export function useLocalStorage<T extends object>(key: string) {
+export function useLocalStorage<T extends object>(key: string): readonly [NonNullable<T> | undefined | null, (newVal: NonNullable<T> | null) => void] {
   const [state, setState] = useLocalStorageString(key);
 
-  const publicSet = useCallback((newVal: T | null | undefined) => {
+  const publicSet = useCallback((newVal: NonNullable<T> | null) => {
     const next = newVal ?? null;
-    if (next === null) setState(null);
-    else setState(JSON.stringify(next));
+    if (next === null) {
+      setState(null);
+    } else {
+      setState(JSON.stringify(next));
+    }
   }, [setState]);
 
-  const publicState = useMemo(() => (state === null ? null : JSON.parse(state)), [state]);
+  const publicState = useMemo(() => (state === null || state === undefined ? state : JSON.parse(state)), [state]);
 
-  return [publicState, publicSet] as const;
+  return [publicState, publicSet];
 }
 
-export function useLocalStorageString(key: string) {
-  const [state, setState] = useState<string | null>(null);
+export function useLocalStorageString(key: string): readonly [string | null | undefined, (newVal: string | null) => void] {
+  const [state, setState] = useState<string | null | undefined>(undefined);
 
   const localStorage = typeof window !== 'undefined' ? window.localStorage : undefined;
 
   useEffect(() => {
     if (localStorage === undefined) return;
     const data = localStorage.getItem(key);
-    if (data !== null) setState(data);
+    setState(data);
   }, [key, localStorage, setState]);
 
   const publicSet = useCallback((newVal: string | null | undefined) => {
