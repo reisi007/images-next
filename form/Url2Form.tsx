@@ -1,28 +1,28 @@
-import { FieldPath } from 'react-hook-form';
-import { UseFormSetValue } from 'react-hook-form/dist/types/form';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
+import { ParsedUrlQuery } from 'querystring';
 
 export type CommonFormFields = Record<'email' | 'firstName' | 'lastName' | 'tel', string> & { server?: string };
 
 export type RequiredFormFields = { dsgvo: boolean };
 
-export function useSetValue<T extends CommonFormFields>(label: FieldPath<CommonFormFields>, setValue: UseFormSetValue<T>) {
-  const { query } = useRouter();
-  const queryValue = query[label];
-
-  useEffect(() => {
-    const value = ensureString(queryValue);
-    if (value === undefined) return;
-    // @ts-ignore label: I have no idea how to type this correctly, CommonFormFields are a subset of T -> ok
-    setValue(label, value, {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  }, [label, queryValue, setValue]);
-}
-
 export function ensureString(input: string | Array<string> | undefined): string | undefined {
   if (Array.isArray(input)) return input.join(',');
   return input;
+}
+
+export function usePrefilledValue<T extends CommonFormFields>(): Partial<T> | undefined {
+  const { query } = useRouter();
+  return useMemo(() => extractFromQuery<T>(query, 'lastName', 'email', 'firstName', 'tel'), [query]);
+}
+
+function extractFromQuery<T extends object>(query: ParsedUrlQuery, ...args: Array<keyof T>): Partial<T> | undefined {
+  if (Object.keys(query).length === 0) return undefined;
+  const strings = Object.fromEntries(
+    args.map((e) => {
+      const queryElement = query[e.toString()];
+      return [e, typeof queryElement === 'string' || typeof queryElement === 'undefined' ? queryElement : queryElement.toString()];
+    }),
+  );
+  return strings as Partial<T>;
 }

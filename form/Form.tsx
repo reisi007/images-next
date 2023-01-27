@@ -1,16 +1,19 @@
 import {
   Control, DeepPartial, FormState, Resolver, SubmitHandler, useForm,
 } from 'react-hook-form';
-import { FormEventHandler, ReactNode, useCallback } from 'react';
+import {
+  FormEventHandler, ReactNode, useCallback, useEffect,
+} from 'react';
 import {
   UseFormClearErrors, UseFormGetValues, UseFormSetError, UseFormSetValue,
 } from 'react-hook-form/dist/types/form';
 import * as yup from 'yup';
+import { FieldPath } from 'react-hook-form/dist/types/path';
 import { Styleable } from '../types/Styleable';
 
 export function Form<T extends object>({
   onSubmit,
-  initialValue,
+  prefilled,
   children,
   className,
   resolver,
@@ -26,10 +29,19 @@ export function Form<T extends object>({
     clearErrors,
     getValues,
   } = useForm<T>({
-    defaultValues: initialValue,
     resolver,
     mode: 'all',
   });
+
+  useEffect(() => {
+    if (prefilled === undefined) return;
+    Object.entries(prefilled)
+      .forEach(([k, v]) => setValue(k as FieldPath<T>, v, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      }));
+  }, [prefilled, setValue]);
 
   const reset = useCallback(() => {
     rawReset(undefined, {
@@ -74,7 +86,7 @@ export const PHONE_REGEXP = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{
 
 export type ExtSubmitHandler<T extends object> = (setErrors: UseFormSetError<T>, clearErrors: UseFormClearErrors<T>, data: T, event?: React.BaseSyntheticEvent, signal?: AbortSignal) => unknown;
 type FormConfig<T extends object> = {
-  initialValue?: DeepPartial<T>
+  prefilled?: DeepPartial<T>
   onSubmit: ExtSubmitHandler<T>,
   resolver: Resolver<T>,
   children: (state: FormState<T>, control: Control<T>, getValue: UseFormGetValues<T>, setValue: UseFormSetValue<T>, reset: () => void) => ReactNode,

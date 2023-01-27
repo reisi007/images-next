@@ -24,7 +24,7 @@ export function StyledLinkButton({
   disabled,
   ...buttonProps
 }: LinkProps & { children?: ReactNode, className?: string, disabled?: boolean }) {
-  const classes = classNames(styles.button, 'text-center black', buttonProps.className);
+  const classes = classNames(styles.button, 'inline-flex items-center justify-center black', buttonProps.className);
   if (disabled) {
     return <StyledButton disabled className={buttonProps.className}>{children}</StyledButton>;
   }

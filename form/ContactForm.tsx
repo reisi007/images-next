@@ -15,7 +15,7 @@ export function ContactForm({
   className,
   style,
   moreOnSubmit,
-  ...initialValue
+  ...prefilled
 }: DeepPartial<ContactFormMessage> & Partial<Styleable> & { moreOnSubmit?: () => void }) {
   const action = useSendEmail<ContactFormMessage>();
   const submit: ExtSubmitHandler<ContactFormMessage> = useCallback((setErrors, clearErrors, e) => {
@@ -30,7 +30,7 @@ export function ContactForm({
   }, [action, moreOnSubmit]);
   return (
     <div className={className} style={style}>
-      <Form<ContactFormMessage> initialValue={initialValue} onSubmit={submit} resolver={contractFormResolver}>
+      <Form<ContactFormMessage> prefilled={prefilled} onSubmit={submit} resolver={contractFormResolver}>
         {(formState, control, getValue, setValue, reset) => <ContactFormContent formState={formState} control={control} getValue={getValue} setValue={setValue} reset={reset} />}
       </Form>
     </div>
