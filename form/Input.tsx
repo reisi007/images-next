@@ -23,7 +23,7 @@ export function Input<T extends object, P extends FieldPath<T> >({
 }: HtmlInputNoUnwantedProperties<T, P> & FieldProperties<T, P>) {
   const id = useId();
   return (
-    <Controller
+    <Controller<T>
       name={fieldName}
       control={control}
       render={({
@@ -35,7 +35,7 @@ export function Input<T extends object, P extends FieldPath<T> >({
       }) => (
         <div className={classNames(className, 'flex flex-col')}>
           <Label id={id} label={label} required={props.required} />
-          <input {...props} ref={ref} value={value ?? ''} onChange={onChange} id={id} />
+          <input {...props} ref={ref} value={value ?? undefined} onChange={onChange} id={id} />
           {!!errorMessage && <span className="text-red-600">{errorMessage.message}</span>}
         </div>
       )}

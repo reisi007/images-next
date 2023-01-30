@@ -1,21 +1,23 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 import classNames from 'classnames';
+import { DeepPartial } from 'react-hook-form';
 import { FloatingActionButton } from '../button/FloatingActionButton';
 import { ReisishotIcon, ReisishotIcons, ReisishotIconSizes } from '../utils/ReisishotIcons';
 import { Header, HeaderProps } from './Header';
 import { Footer } from './Footer';
 import { useIntersection } from '../utils/UseIntersection';
 import { useModal } from '../utils/Modal';
-import { ContactForm } from '../form/ContactForm';
+import { ContactForm, ContactFormMessage } from '../form/ContactForm';
 import styles from '../utils/Utils.module.css';
 import { FONT_MARTINA } from '../fonts/Font';
 
-export type BasePageProps = { children: ReactNode, className?: string, showContactForm?:boolean };
+export type BasePageProps = { children: ReactNode, className?: string, showContactForm?:boolean, prefilledContractForm?: DeepPartial<ContactFormMessage> };
 
 export function BasePage({
   children,
   className,
   showContactForm = true,
+  prefilledContractForm,
   ...headerProps
 }: BasePageProps & HeaderProps) {
   const [isFabVisible, setFabVisible] = useState(true);
@@ -24,7 +26,7 @@ export function BasePage({
     useCallback((e) => setFabVisible(!e[0].isIntersecting), [setFabVisible]),
     '0px 0px 0px 0px',
   );
-  const [dialog, setDialogVisible] = useModal('Kontaktiere mich', (setVisible) => (<ContactForm moreOnSubmit={() => setVisible(false)} />));
+  const [dialog, setDialogVisible] = useModal('Kontaktiere mich', (setVisible) => (<ContactForm {...prefilledContractForm} moreOnSubmit={() => setVisible(false)} />));
   const openDialogAction = useCallback(() => {
     setDialogVisible(true);
   }, [setDialogVisible]);
@@ -39,7 +41,7 @@ export function BasePage({
         { showContactForm && (
         <>
           <h2>Kontaktere mich</h2>
-          <ContactForm className={classNames(styles.container, 'p pt-6')} />
+          <ContactForm {...prefilledContractForm} className={classNames(styles.container, 'p pt-6')} />
         </>
         )}
         <Footer />

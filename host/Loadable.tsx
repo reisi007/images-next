@@ -1,5 +1,6 @@
 import { SWRResponse } from 'swr';
 import { ReactNode } from 'react';
+import classNames from 'classnames';
 import { LoadingIndicator } from '../utils/LoadingIndicator';
 
 export function Loadable<Data>({ data, error, children }: SWRResponse<Data, Error> & { children: (date:Data) => ReactNode }):JSX.Element {
@@ -8,9 +9,9 @@ export function Loadable<Data>({ data, error, children }: SWRResponse<Data, Erro
   return <>{children(data)}</>;
 }
 
-function DisplayError({ error }:{ error: Error }) {
+export function DisplayError({ error, className }:{ error: { message:string }, className?:string }) {
   return (
-    <div className="text-error">
+    <div className={classNames('text-error', className)}>
       {error.message}
     </div>
   );

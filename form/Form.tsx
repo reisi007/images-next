@@ -99,6 +99,8 @@ export type FormChildrenProps<T extends object> = {
   getValue: UseFormGetValues<T>,
   setValue: UseFormSetValue<T>,
   reset: () => void
+
+  prefilled?: DeepPartial<T>
 };
 
-export type MinimalFormChildrenProps<T extends object> = Pick<FormChildrenProps<T>, 'formState' | 'control'>;
+export type MinimalFormChildrenProps<T extends object> = Pick<FormChildrenProps<T>, 'formState' | 'control' | 'prefilled'>;
