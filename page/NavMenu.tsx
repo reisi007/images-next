@@ -7,8 +7,13 @@ import { ReisishotIcon, ReisishotIcons, ReisishotIconSizes } from '../utils/Reis
 
 export type NavMenuProps = { title: string, menuItems?: { [key: string]: PathEntry } };
 
-export function NavMenu({ title, menuItems }: NavMenuProps) {
-  const curPath = useRouter().asPath.substring(1);
+export function NavMenu({
+  title,
+  menuItems,
+}: NavMenuProps) {
+  const curPath = useRouter()
+    .asPath
+    .substring(1);
   const allMenuLinks = useMemo(() => (menuItems === undefined ? [] : Object.entries(menuItems)
     .filter(([p]) => p !== curPath)), [curPath, menuItems]);
 
@@ -44,7 +49,8 @@ function renderMenuLink(props: [string, PathEntry]) {
   const [url, { title }] = props;
   return (
     <li className="inline-block list-none text-center" key={url}>
-      <Link className="black text-center text-lg" href={`/${url}`}>{title}</Link>
+      {!url.startsWith('http') && <Link className="black text-center text-lg" href={`/${url}`}>{title}</Link>}
+      {url.startsWith('http') && <a className="black text-center text-lg" target="_blank" href={url} rel="noreferrer">{title}</a>}
     </li>
   );
 }
